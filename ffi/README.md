@@ -12,7 +12,8 @@ cargo build [--release] [--features default-engine]
 to build and run the C program which excercises FFI:
 
 ```sh
-table="$(git rev-parse --show-toplevel)/kernel/tests/data/table-without-dv-small" make run
+cargo b --features default-engine,sync-engine
+table=../kernel/tests/data/table-without-dv-small make run
 ```
 
 
