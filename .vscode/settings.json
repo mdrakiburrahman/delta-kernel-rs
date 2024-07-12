@@ -1,0 +1,6 @@
+{
+    "C_Cpp.default.defines": [
+        "DEFINE_DEFAULT_ENGINE",
+        "DEFINE_SYNC_ENGINE"
+    ]
+}

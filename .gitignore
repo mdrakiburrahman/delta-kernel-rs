@@ -4,7 +4,6 @@
 # IDE
 .dir-locals.el
 .idea/
-.vscode/
 .vim
 
 # Rust

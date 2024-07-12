@@ -29,3 +29,10 @@ By default the VSCode C/C++ Extension does not use any defines flags. You can op
         "DEFINE_SYNC_ENGINE"
     ]
 ```
+
+To debug:
+
+```
+sudo apt-get update
+sudo apt-get install gdb
+```
