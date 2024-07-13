@@ -6,7 +6,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/ffi/cffi-test",
-            "args": ["${workspaceFolder}/kernel/tests/data/table-without-dv-small"],
+            "args": ["${workspaceFolder}/kernel/tests/data/basic_partitioned"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [

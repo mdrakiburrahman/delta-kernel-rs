@@ -12,7 +12,7 @@ cargo build [--release] [--features default-engine]
 to build and run the C program which excercises FFI:
 
 ```sh
-cargo b --features default-engine,sync-engine
+cargo build --all-features
 table=../kernel/tests/data/table-without-dv-small make run
 ```
 
@@ -36,3 +36,16 @@ To debug:
 sudo apt-get update
 sudo apt-get install gdb
 ```
+
+To build DLL (for windows) and .so (for linux):
+
+```
+cd /workspaces/delta-kernel-rs/ffi
+rustup target add x86_64-pc-windows-gnu
+sudo apt-get update
+sudo apt-get install mingw-w64
+
+cargo build --all-features --lib --target x86_64-pc-windows-gnu
+```
+
+DLL is available here: `target/x86_64-pc-windows-gnu/debug/delta_kernel_ffi.dll`
