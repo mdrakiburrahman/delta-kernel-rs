@@ -1,3 +1,10 @@
+// -----------------------------------------------------------------------------
+// <copyright company="The Delta Lake Project Authors">
+// Copyright (2024) The Delta Lake Project Authors.  All rights reserved.
+// Licensed under the Apache license. See LICENSE file in the project root for full license information.
+// </copyright>
+// -----------------------------------------------------------------------------
+
 using System.Runtime.InteropServices;
 
 namespace DeltaLake.Kernel.Rust.Ffi;
@@ -8,22 +15,6 @@ public unsafe partial struct ExternResultusize
 
     [NativeTypeName("__AnonymousRecord_delta_kernel_ffi_L490_C3")]
     public _Anonymous_e__Union Anonymous;
-
-    public ref nuint ok
-    {
-        get
-        {
-            return ref MemoryMarshal.GetReference(MemoryMarshal.CreateSpan(ref Anonymous.Anonymous1.ok, 1));
-        }
-    }
-
-    public ref EngineError* err
-    {
-        get
-        {
-            return ref MemoryMarshal.GetReference(MemoryMarshal.CreateSpan(ref this, 1)).Anonymous.Anonymous2.err;
-        }
-    }
 
     [StructLayout(LayoutKind.Explicit)]
     public unsafe partial struct _Anonymous_e__Union
@@ -39,7 +30,7 @@ public unsafe partial struct ExternResultusize
         public partial struct _Anonymous1_e__Struct
         {
             [NativeTypeName("uintptr_t")]
-            public nuint ok;
+            public ulong ok;
         }
 
         public unsafe partial struct _Anonymous2_e__Struct

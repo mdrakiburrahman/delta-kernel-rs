@@ -5,14 +5,10 @@
 // </copyright>
 // -----------------------------------------------------------------------------
 
-using System;
+using System.Runtime.InteropServices;
 
 namespace DeltaLake.Kernel.Rust.Ffi;
 
-public unsafe partial struct EngineIterator
-{
-    public void* data;
-
-    [NativeTypeName("const void *(*)(void *)")]
-    public IntPtr get_next;
-}
+[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+[return: NativeTypeName("NullableCvoid")]
+public unsafe delegate void* AllocateStringFn([NativeTypeName("struct KernelStringSlice")] KernelStringSlice kernel_str);

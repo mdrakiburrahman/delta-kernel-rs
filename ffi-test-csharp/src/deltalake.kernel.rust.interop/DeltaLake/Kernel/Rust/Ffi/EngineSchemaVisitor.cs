@@ -1,3 +1,12 @@
+// -----------------------------------------------------------------------------
+// <copyright company="The Delta Lake Project Authors">
+// Copyright (2024) The Delta Lake Project Authors.  All rights reserved.
+// Licensed under the Apache license. See LICENSE file in the project root for full license information.
+// </copyright>
+// -----------------------------------------------------------------------------
+
+using System;
+
 namespace DeltaLake.Kernel.Rust.Ffi;
 
 public unsafe partial struct EngineSchemaVisitor
@@ -5,53 +14,53 @@ public unsafe partial struct EngineSchemaVisitor
     public void* data;
 
     [NativeTypeName("uintptr_t (*)(void *, uintptr_t)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, nuint> make_field_list;
+    public IntPtr make_field_list;
 
     [NativeTypeName("void (*)(void *, uintptr_t, struct KernelStringSlice, uintptr_t)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, KernelStringSlice, nuint, void> visit_struct;
+    public IntPtr visit_struct;
 
     [NativeTypeName("void (*)(void *, uintptr_t, struct KernelStringSlice, bool, uintptr_t)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, KernelStringSlice, bool, nuint, void> visit_array;
+    public IntPtr visit_array;
 
     [NativeTypeName("void (*)(void *, uintptr_t, struct KernelStringSlice, bool, uintptr_t)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, KernelStringSlice, bool, nuint, void> visit_map;
+    public IntPtr visit_map;
 
     [NativeTypeName("void (*)(void *, uintptr_t, struct KernelStringSlice, uint8_t, uint8_t)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, KernelStringSlice, byte, byte, void> visit_decimal;
+    public IntPtr visit_decimal;
 
     [NativeTypeName("void (*)(void *, uintptr_t, struct KernelStringSlice)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, KernelStringSlice, void> visit_string;
+    public IntPtr visit_string;
 
     [NativeTypeName("void (*)(void *, uintptr_t, struct KernelStringSlice)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, KernelStringSlice, void> visit_long;
+    public IntPtr visit_long;
 
     [NativeTypeName("void (*)(void *, uintptr_t, struct KernelStringSlice)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, KernelStringSlice, void> visit_integer;
+    public IntPtr visit_integer;
 
     [NativeTypeName("void (*)(void *, uintptr_t, struct KernelStringSlice)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, KernelStringSlice, void> visit_short;
+    public IntPtr visit_short;
 
     [NativeTypeName("void (*)(void *, uintptr_t, struct KernelStringSlice)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, KernelStringSlice, void> visit_byte;
+    public IntPtr visit_byte;
 
     [NativeTypeName("void (*)(void *, uintptr_t, struct KernelStringSlice)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, KernelStringSlice, void> visit_float;
+    public IntPtr visit_float;
 
     [NativeTypeName("void (*)(void *, uintptr_t, struct KernelStringSlice)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, KernelStringSlice, void> visit_double;
+    public IntPtr visit_double;
 
     [NativeTypeName("void (*)(void *, uintptr_t, struct KernelStringSlice)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, KernelStringSlice, void> visit_boolean;
+    public IntPtr visit_boolean;
 
     [NativeTypeName("void (*)(void *, uintptr_t, struct KernelStringSlice)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, KernelStringSlice, void> visit_binary;
+    public IntPtr visit_binary;
 
     [NativeTypeName("void (*)(void *, uintptr_t, struct KernelStringSlice)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, KernelStringSlice, void> visit_date;
+    public IntPtr visit_date;
 
     [NativeTypeName("void (*)(void *, uintptr_t, struct KernelStringSlice)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, KernelStringSlice, void> visit_timestamp;
+    public IntPtr visit_timestamp;
 
     [NativeTypeName("void (*)(void *, uintptr_t, struct KernelStringSlice)")]
-    public delegate* unmanaged[Cdecl]<void*, nuint, KernelStringSlice, void> visit_timestamp_ntz;
+    public IntPtr visit_timestamp_ntz;
 }

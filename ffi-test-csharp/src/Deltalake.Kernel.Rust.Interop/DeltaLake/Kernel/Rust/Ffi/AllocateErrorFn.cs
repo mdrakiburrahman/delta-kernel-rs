@@ -5,14 +5,10 @@
 // </copyright>
 // -----------------------------------------------------------------------------
 
-using System;
+using System.Runtime.InteropServices;
 
 namespace DeltaLake.Kernel.Rust.Ffi;
 
-public unsafe partial struct EngineIterator
-{
-    public void* data;
-
-    [NativeTypeName("const void *(*)(void *)")]
-    public IntPtr get_next;
-}
+[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+[return: NativeTypeName("struct EngineError *")]
+public unsafe delegate EngineError* AllocateErrorFn([NativeTypeName("enum KernelError")] KernelError etype, [NativeTypeName("struct KernelStringSlice")] KernelStringSlice msg);

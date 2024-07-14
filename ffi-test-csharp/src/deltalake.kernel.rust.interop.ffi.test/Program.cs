@@ -17,12 +17,17 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
 
             fixed (sbyte* tablePathPtr = tablePath.ToSByte())
             {
-                KernelStringSlice table_path_slice = new KernelStringSlice
+                KernelStringSlice tablePathSlice = new KernelStringSlice
                 {
                     ptr = tablePathPtr,
                     len = (nuint)tablePath.Length
                 };
+
+                ExternResultHandleSharedExternEngine defaultEngineRes =
+                    FfiNativeMethodsHandler.get_default_engine(tablePathSlice, IntPtr.Zero);
             }
+            ExternResultHandleSharedExternEngine syncEngineRes =
+                FfiNativeMethodsHandler.get_sync_engine(IntPtr.Zero);
         }
     }
 }
