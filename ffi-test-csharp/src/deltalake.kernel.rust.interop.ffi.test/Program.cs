@@ -1,5 +1,7 @@
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Errors;
 using DeltaLake.Kernel.Rust.Ffi;
 using DeltaLake.Kernel.Rust.Interop.Ffi.Test.Extensions;
+using System.Runtime.InteropServices;
 
 namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
 {
@@ -23,11 +25,14 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
                     len = (nuint)tablePath.Length
                 };
 
+                AllocateErrorFn callbackDelegate = AllocateErrorCallbacks.WarnAndThrowAllocateError;
+                IntPtr callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+
                 ExternResultHandleSharedExternEngine defaultEngineRes =
-                    FFI_NativeMethodsHandler.get_default_engine(tablePathSlice, IntPtr.Zero);
+                    FFI_NativeMethodsHandler.get_default_engine(tablePathSlice, callbackPointer);
+                ExternResultHandleSharedExternEngine syncEngineRes =
+                    FFI_NativeMethodsHandler.get_sync_engine(callbackPointer);
             }
-            ExternResultHandleSharedExternEngine syncEngineRes =
-                FFI_NativeMethodsHandler.get_sync_engine(IntPtr.Zero);
         }
     }
 }
