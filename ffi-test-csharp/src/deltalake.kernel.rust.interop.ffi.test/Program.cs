@@ -24,10 +24,10 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
                 };
 
                 ExternResultHandleSharedExternEngine defaultEngineRes =
-                    FfiNativeMethodsHandler.get_default_engine(tablePathSlice, IntPtr.Zero);
+                    FFINativeMethodsHandler.get_default_engine(tablePathSlice, IntPtr.Zero);
             }
             ExternResultHandleSharedExternEngine syncEngineRes =
-                FfiNativeMethodsHandler.get_sync_engine(IntPtr.Zero);
+                FFINativeMethodsHandler.get_sync_engine(IntPtr.Zero);
         }
     }
 }
