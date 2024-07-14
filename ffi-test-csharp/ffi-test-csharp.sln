@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35017.193
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ffi-test-csharp", "ffi-test-csharp.csproj", "{195AE195-3FE9-496F-A2EA-F42B614AB22C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B5046862-AC9C-42B8-98D8-3A00643A7ECD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "deltalake.kernel.rust.interop", "src\deltalake.kernel.rust.interop\deltalake.kernel.rust.interop.csproj", "{9990D726-1A7A-4A42-AB88-A77B55937771}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "deltalake.kernel.rust.interop.ffi.test", "src\deltalake.kernel.rust.interop.ffi.test\deltalake.kernel.rust.interop.ffi.test.csproj", "{086B0224-9464-494F-A612-D7F9D240CDBC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,10 +15,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{195AE195-3FE9-496F-A2EA-F42B614AB22C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{195AE195-3FE9-496F-A2EA-F42B614AB22C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{195AE195-3FE9-496F-A2EA-F42B614AB22C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{195AE195-3FE9-496F-A2EA-F42B614AB22C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9990D726-1A7A-4A42-AB88-A77B55937771}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9990D726-1A7A-4A42-AB88-A77B55937771}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9990D726-1A7A-4A42-AB88-A77B55937771}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9990D726-1A7A-4A42-AB88-A77B55937771}.Release|Any CPU.Build.0 = Release|Any CPU
+		{086B0224-9464-494F-A612-D7F9D240CDBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{086B0224-9464-494F-A612-D7F9D240CDBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{086B0224-9464-494F-A612-D7F9D240CDBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{086B0224-9464-494F-A612-D7F9D240CDBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
