@@ -88,7 +88,8 @@ int main(int argc, char* argv[]) {
 
   KernelStringSlice table_path_slice = { table_path, strlen(table_path) };
 
-  ExternResultHandleSharedExternEngine default_engine_res = get_default_engine(table_path_slice, NULL);
+  ExternResultHandleSharedExternEngine default_engine_res =
+    get_default_engine(table_path_slice, NULL);
   ExternResultHandleSharedExternEngine sync_engine_res = get_sync_engine(NULL);
 
   printf("Executing with default engine\n");
