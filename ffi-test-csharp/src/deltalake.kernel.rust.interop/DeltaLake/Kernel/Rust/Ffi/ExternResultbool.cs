@@ -6,7 +6,7 @@ public unsafe partial struct ExternResultbool
 {
     public ExternResultbool_Tag tag;
 
-    [NativeTypeName("__AnonymousRecord_delta_kernel_ffi_L521_C3")]
+    [NativeTypeName("__AnonymousRecord_delta_kernel_ffi_L511_C3")]
     public _Anonymous_e__Union Anonymous;
 
     public ref bool ok
@@ -29,11 +29,11 @@ public unsafe partial struct ExternResultbool
     public unsafe partial struct _Anonymous_e__Union
     {
         [FieldOffset(0)]
-        [NativeTypeName("__AnonymousRecord_delta_kernel_ffi_L522_C5")]
+        [NativeTypeName("__AnonymousRecord_delta_kernel_ffi_L512_C5")]
         public _Anonymous1_e__Struct Anonymous1;
 
         [FieldOffset(0)]
-        [NativeTypeName("__AnonymousRecord_delta_kernel_ffi_L525_C5")]
+        [NativeTypeName("__AnonymousRecord_delta_kernel_ffi_L515_C5")]
         public _Anonymous2_e__Struct Anonymous2;
 
         public partial struct _Anonymous1_e__Struct

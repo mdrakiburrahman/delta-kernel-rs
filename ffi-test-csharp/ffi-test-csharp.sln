@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35017.193
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B5046862-AC9C-42B8-98D8-3A00643A7ECD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deltalake.Kernel.Rust.Interop", "src\Deltalake.Kernel.Rust.Interop\Deltalake.Kernel.Rust.Interop.csproj", "{3043C8AC-AC02-4BDD-B86D-ED8A169A4645}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "deltalake.kernel.rust.interop", "src\deltalake.kernel.rust.interop\deltalake.kernel.rust.interop.csproj", "{9990D726-1A7A-4A42-AB88-A77B55937771}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "deltalake.kernel.rust.interop.ffi.test", "src\deltalake.kernel.rust.interop.ffi.test\deltalake.kernel.rust.interop.ffi.test.csproj", "{086B0224-9464-494F-A612-D7F9D240CDBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deltalake.Kernel.Rust.Interop.Ffi.Test", "src\Deltalake.Kernel.Rust.Interop.Ffi.Test\Deltalake.Kernel.Rust.Interop.Ffi.Test.csproj", "{E5829855-F529-4909-A5BE-29C228274195}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,19 +13,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9990D726-1A7A-4A42-AB88-A77B55937771}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9990D726-1A7A-4A42-AB88-A77B55937771}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9990D726-1A7A-4A42-AB88-A77B55937771}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9990D726-1A7A-4A42-AB88-A77B55937771}.Release|Any CPU.Build.0 = Release|Any CPU
-		{086B0224-9464-494F-A612-D7F9D240CDBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{086B0224-9464-494F-A612-D7F9D240CDBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{086B0224-9464-494F-A612-D7F9D240CDBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{086B0224-9464-494F-A612-D7F9D240CDBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3043C8AC-AC02-4BDD-B86D-ED8A169A4645}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3043C8AC-AC02-4BDD-B86D-ED8A169A4645}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3043C8AC-AC02-4BDD-B86D-ED8A169A4645}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3043C8AC-AC02-4BDD-B86D-ED8A169A4645}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5829855-F529-4909-A5BE-29C228274195}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5829855-F529-4909-A5BE-29C228274195}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5829855-F529-4909-A5BE-29C228274195}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5829855-F529-4909-A5BE-29C228274195}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4D2D37CE-55C5-4D86-BD45-B0371899EAC1}
+		SolutionGuid = {FB308E52-EFC1-4B45-A710-6DD23F28A2A4}
 	EndGlobalSection
 EndGlobal

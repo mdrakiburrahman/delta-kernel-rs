@@ -10,6 +10,25 @@ public static unsafe partial class DeltaLakeKernelFfiSource
     [DllImport("delta_kernel_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "?free_engine_data@@YAXPEAUExclusiveEngineData@@@Z", ExactSpelling = true)]
     public static extern void free_engine_data([NativeTypeName("HandleExclusiveEngineData")] ExclusiveEngineData* engine_data);
 
+    [DllImport("delta_kernel_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "?get_engine_builder@@YA?AUExternResultEngineBuilder@@UKernelStringSlice@@P6APEAUEngineError@@W4KernelError@@0@Z@Z", ExactSpelling = true)]
+    [return: NativeTypeName("struct ExternResultEngineBuilder")]
+    public static extern ExternResultEngineBuilder get_engine_builder([NativeTypeName("struct KernelStringSlice")] KernelStringSlice path, [NativeTypeName("AllocateErrorFn")] delegate* unmanaged[Cdecl]<KernelError, KernelStringSlice, EngineError*> allocate_error);
+
+    [DllImport("delta_kernel_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "?set_builder_option@@YAXPEAUEngineBuilder@@UKernelStringSlice@@1@Z", ExactSpelling = true)]
+    public static extern void set_builder_option([NativeTypeName("struct EngineBuilder *")] EngineBuilder* builder, [NativeTypeName("struct KernelStringSlice")] KernelStringSlice key, [NativeTypeName("struct KernelStringSlice")] KernelStringSlice value);
+
+    [DllImport("delta_kernel_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "?builder_build@@YA?AUExternResultHandleSharedExternEngine@@PEAUEngineBuilder@@@Z", ExactSpelling = true)]
+    [return: NativeTypeName("struct ExternResultHandleSharedExternEngine")]
+    public static extern ExternResultHandleSharedExternEngine builder_build([NativeTypeName("struct EngineBuilder *")] EngineBuilder* builder);
+
+    [DllImport("delta_kernel_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "?get_default_engine@@YA?AUExternResultHandleSharedExternEngine@@UKernelStringSlice@@P6APEAUEngineError@@W4KernelError@@0@Z@Z", ExactSpelling = true)]
+    [return: NativeTypeName("struct ExternResultHandleSharedExternEngine")]
+    public static extern ExternResultHandleSharedExternEngine get_default_engine([NativeTypeName("struct KernelStringSlice")] KernelStringSlice path, [NativeTypeName("AllocateErrorFn")] delegate* unmanaged[Cdecl]<KernelError, KernelStringSlice, EngineError*> allocate_error);
+
+    [DllImport("delta_kernel_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "?get_sync_engine@@YA?AUExternResultHandleSharedExternEngine@@P6APEAUEngineError@@W4KernelError@@UKernelStringSlice@@@Z@Z", ExactSpelling = true)]
+    [return: NativeTypeName("struct ExternResultHandleSharedExternEngine")]
+    public static extern ExternResultHandleSharedExternEngine get_sync_engine([NativeTypeName("AllocateErrorFn")] delegate* unmanaged[Cdecl]<KernelError, KernelStringSlice, EngineError*> allocate_error);
+
     [DllImport("delta_kernel_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "?free_engine@@YAXPEAUSharedExternEngine@@@Z", ExactSpelling = true)]
     public static extern void free_engine([NativeTypeName("HandleSharedExternEngine")] SharedExternEngine* engine);
 
@@ -123,6 +142,10 @@ public static unsafe partial class DeltaLakeKernelFfiSource
 
     [DllImport("delta_kernel_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "?get_raw_engine_data@@YAPEAXPEAUExclusiveEngineData@@@Z", ExactSpelling = true)]
     public static extern void* get_raw_engine_data([NativeTypeName("HandleExclusiveEngineData")] ExclusiveEngineData* data);
+
+    [DllImport("delta_kernel_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "?get_raw_arrow_data@@YA?AUExternResultArrowFFIData@@PEAUExclusiveEngineData@@PEAUSharedExternEngine@@@Z", ExactSpelling = true)]
+    [return: NativeTypeName("struct ExternResultArrowFFIData")]
+    public static extern ExternResultArrowFFIData get_raw_arrow_data([NativeTypeName("HandleExclusiveEngineData")] ExclusiveEngineData* data, [NativeTypeName("HandleSharedExternEngine")] SharedExternEngine* engine);
 
     [DllImport("delta_kernel_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "?free_scan@@YAXPEAUSharedScan@@@Z", ExactSpelling = true)]
     public static extern void free_scan([NativeTypeName("HandleSharedScan")] SharedScan* scan);
