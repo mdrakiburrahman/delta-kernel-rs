@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build CFFI Test",
+            "label": "Build All",
             "type": "shell",
             "command": "pushd ffi && make all && popd",
             "group": {

@@ -95,13 +95,12 @@ void set_builder_opt(EngineBuilder* engine_builder, char* key, char* val)
 
 // Kernel will call this function for each file that should be scanned. The arguments include enough
 // context to constuct the correct logical data from the physically read parquet
-void scan_row_callback(
-  void* engine_context,
-  KernelStringSlice path,
-  int64_t size,
-  const DvInfo* dv_info,
-  const CStringMap* partition_values)
-{
+void scan_row_callback(void* engine_context,
+                    KernelStringSlice path,
+                    int64_t size,
+                    const Stats* stats,
+                    const DvInfo* dv_info,
+                    const CStringMap* partition_values) {
   (void)size; // not using this at the moment
   struct EngineContext* context = engine_context;
   print_diag("Called back to read file: %.*s\n", (int)path.len, path.ptr);
@@ -194,13 +193,24 @@ int main(int argc, char* argv[])
     return -1;
   }
 
+  // Get token via
+  //
+  // >>> az account get-access-token --resource "https://storage.azure.com" --query accessToken -o tsv
+  // 
+  // and set it in the environment
+  //
+  char* bearer_token = getenv("BEARER_TOKEN");
+  if (bearer_token == NULL) {
+      printf("BEARER_TOKEN is not set.\n");
+      return -1;
+  }
+
   char* table_path = argv[1];
   printf("Reading table at %s\n", table_path);
 
   KernelStringSlice table_path_slice = { table_path, strlen(table_path) };
 
-  ExternResultEngineBuilder engine_builder_res =
-    get_engine_builder(table_path_slice, allocate_error);
+  ExternResultEngineBuilder engine_builder_res = get_engine_builder(table_path_slice, allocate_error);
   if (engine_builder_res.tag != OkEngineBuilder) {
     print_error("Could not get engine builder.", (Error*)engine_builder_res.err);
     free_error((Error*)engine_builder_res.err);
@@ -209,10 +219,7 @@ int main(int argc, char* argv[])
 
   // an example of using a builder to set options when building an engine
   EngineBuilder* engine_builder = engine_builder_res.ok;
-  set_builder_opt(engine_builder, "aws_region", "us-west-2");
-  // potentially set credentials here
-  // set_builder_opt(engine_builder, "aws_access_key_id" , "[redacted]");
-  // set_builder_opt(engine_builder, "aws_secret_access_key", "[redacted]");
+  set_builder_opt(engine_builder, "bearer_token", bearer_token);
   ExternResultHandleSharedExternEngine engine_res = builder_build(engine_builder);
 
   // alternately if we don't care to set any options on the builder:
@@ -220,7 +227,7 @@ int main(int argc, char* argv[])
   //   get_default_engine(table_path_slice, NULL);
 
   if (engine_res.tag != OkHandleSharedExternEngine) {
-    print_error("File to get engine", (Error*)engine_builder_res.err);
+    print_error("Failed to get engine", (Error*)engine_builder_res.err);
     free_error((Error*)engine_builder_res.err);
     return -1;
   }

@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Main",
+            "name": "Launch CFFI Test",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/ffi/cffi-test",
@@ -25,7 +25,37 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "Build CFFI Test"
+            "preLaunchTask": "Build All"
+        },
+        {
+            "name": "Launch Read Table App",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/ffi/examples/read-table/read_table",
+            "args": ["abfss://.../date_dim/"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "${workspaceFolder}/target/debug"
+                },
+                {
+                    "name": "BEARER_TOKEN",
+                    "value": "ey..."
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Build All"
         }
     ]
 }

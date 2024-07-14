@@ -9,10 +9,17 @@ You can build static and shared-libraries, as well as the include headers by sim
 cargo build [--release] [--features default-engine]
 ```
 
-to build and run the C program which excercises FFI:
+to build and run the C program which exercises FFI:
 
 ```sh
+# First, build the kernel and all dependencies, including the FFI
+#
+cd /workspaces/delta-kernel-rs
 cargo build --all-features
+
+# Then, run the test FFI program
+#
+cd /workspaces/delta-kernel-rs/ffi
 table=../kernel/tests/data/table-without-dv-small make run
 ```
 
@@ -49,3 +56,6 @@ cargo build --all-features --lib --target x86_64-pc-windows-gnu
 ```
 
 DLL is available here: `target/x86_64-pc-windows-gnu/debug/delta_kernel_ffi.dll`
+
+To debug the "read_table", the Azure Feature must be turned on.
+Ensure to build the entire project with all features.

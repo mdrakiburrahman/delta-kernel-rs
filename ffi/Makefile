@@ -1,5 +1,7 @@
 BINARY=cffi-test
 SOURCES=cffi-test.c
+READBINARY=examples/read-table/read_table
+READSOURCES=examples/read-table/read_table.c
 INCPATHS=../target/ffi-headers
 LIBPATHS=../target/debug
 LDFLAGS=-ldelta_kernel_ffi #`pkg-config --libs arrow-glib`
@@ -7,15 +9,20 @@ CFLAGS=-c -g -Wall -DDEFINE_DEFAULT_ENGINE -DDEFINE_SYNC_ENGINE #`pkg-config --c
 CC=gcc
 
 OBJECTS=$(SOURCES:.c=.o)
+READOBJECTS=$(READSOURCES:.c=.o)
 INCFLAGS=$(foreach TMP,$(INCPATHS),-I$(TMP))
 LIBFLAGS=$(foreach TMP,$(LIBPATHS),-L$(TMP))
 
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-all: $(SOURCES) $(BINARY)
+all: $(SOURCES) $(BINARY) $(READBINARY) $(READSOURCES)
 
 $(BINARY): $(OBJECTS)
 	$(CC) $(LIBFLAGS) $(OBJECTS) $(LDFLAGS) -o $@
+
+$(READBINARY): $(READOBJECTS)
+	$(CC) $(LIBFLAGS) $(READOBJECTS) $(LDFLAGS) -o $@
+
 .c.o:
 	$(CC) $(INCFLAGS) $(CFLAGS) -fPIC $< -o $@
 
@@ -26,7 +33,7 @@ test: $(BINARY)
 	LD_LIBRARY_PATH=$(LIBPATHS) ./$(BINARY) file://$(ROOT_DIR)/../kernel/tests/data/basic_partitioned
 
 distclean: clean
-	rm -f $(BINARY)
+	rm -f $(BINARY) $(READBINARY)
 
 clean:
-	rm -f $(OBJECTS) $(BINARY)
+	rm -f $(OBJECTS) $(BINARY) $(READBINARY)
