@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 
 namespace DeltaLake.Kernel.Rust.Ffi;
 
-public static unsafe partial class FFINativeMethodsHandler
+public static unsafe partial class FFI_NativeMethodsHandler
 {
     [DllImport("delta_kernel_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "?free_bool_slice@@YAXUKernelBoolSlice@@@Z", ExactSpelling = true)]
     public static extern void free_bool_slice([NativeTypeName("struct KernelBoolSlice")] KernelBoolSlice slice);
