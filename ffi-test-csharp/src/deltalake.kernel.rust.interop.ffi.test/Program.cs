@@ -32,6 +32,8 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
                     FFI_NativeMethodsHandler.get_default_engine(tablePathSlice, callbackPointer);
                 ExternResultHandleSharedExternEngine syncEngineRes =
                     FFI_NativeMethodsHandler.get_sync_engine(callbackPointer);
+
+                Console.WriteLine($"Executing with default engine");
             }
         }
     }
