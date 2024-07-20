@@ -1,4 +1,4 @@
-BINARY=cffi-test
+CFFITESTBINARY=cffi-test
 READBINARY=examples/read-table/read_table
 
 SOURCES=cffi-test.c
@@ -20,9 +20,9 @@ LIBFLAGS=$(foreach TMP,$(LIBPATHS),-L$(TMP))
 
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-all: $(SOURCES) $(READSOURCES) $(BINARY) $(READBINARY)
+all: $(SOURCES) $(READSOURCES) $(CFFITESTBINARY) $(READBINARY)
 
-$(BINARY): $(OBJECTS)
+$(CFFITESTBINARY): $(OBJECTS)
 	$(CC) $(LIBFLAGS) $(OBJECTS) $(LDFLAGS) -o $@
 
 $(READBINARY): $(READOBJECTS)
@@ -31,14 +31,14 @@ $(READBINARY): $(READOBJECTS)
 .c.o:
 	$(CC) $(INCFLAGS) $(CFLAGS) -fPIC $< -o $@
 
-run: $(BINARY)
-	LD_LIBRARY_PATH=$(LIBPATHS) ./$(BINARY) $(table)
+run: $(CFFITESTBINARY)
+	LD_LIBRARY_PATH=$(LIBPATHS) ./$(CFFITESTBINARY) $(table)
 
-test: $(BINARY)
-	LD_LIBRARY_PATH=$(LIBPATHS) ./$(BINARY) file://$(ROOT_DIR)/../kernel/tests/data/basic_partitioned
+test: $(CFFITESTBINARY)
+	LD_LIBRARY_PATH=$(LIBPATHS) ./$(CFFITESTBINARY) file://$(ROOT_DIR)/../kernel/tests/data/basic_partitioned
 
 distclean: clean
-	rm -f $(BINARY) $(READBINARY)
+	rm -f $(CFFITESTBINARY) $(READBINARY)
 
 clean:
-	rm -f $(OBJECTS) $(READOBJECTS) $(BINARY) $(READBINARY)
+	rm -f $(OBJECTS) $(READOBJECTS) $(CFFITESTBINARY) $(READBINARY)
