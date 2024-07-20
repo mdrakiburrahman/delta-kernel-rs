@@ -37,6 +37,8 @@ $(BINARY_CFFI_TEST): $(OBJECTS_CFFI_TEST)
 $(BINARY_READ_TABLE_TEST): $(OBJECTS_READ_TABLE_TEST)
 	$(COMPILER) $(FLAGS_LIB) $(OBJECTS_READ_TABLE_TEST) $(FLAGS_LINK_DELTA_FFI) -o $@
 
+# Tells make how to transform a .c file into a .o file
+#
 .c.o:
 	$(COMPILER) $(FLAGS_INCLUDE) $(FLAGS_COMPILER) -fPIC $< -o $@
 
