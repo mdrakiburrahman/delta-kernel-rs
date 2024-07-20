@@ -2,6 +2,10 @@
 
 This crate provides a c foreign function internface (ffi) for delta-kernel-rs.
 
+```bash
+git clean -ffdX
+```
+
 ## Building
 You can build static and shared-libraries, as well as the include headers by simply running:
 
@@ -45,7 +49,7 @@ To build DLL (for windows) and .so (for linux):
 cd /workspaces/delta-kernel-rs/ffi
 rustup target add x86_64-pc-windows-gnu
 sudo apt-get update
-sudo apt-get install mingw-w64
+sudo apt-get install mingw-w64  -y
 
 cargo build --all-features --lib --target x86_64-pc-windows-gnu
 ```
@@ -58,7 +62,7 @@ To debug, we need `gdb`.
 
 ```
 sudo apt-get update
-sudo apt-get install gdb
+sudo apt-get install gdb -y
 ```
 
 #### ffi/cffi-test.c
