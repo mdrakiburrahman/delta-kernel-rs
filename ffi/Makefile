@@ -20,10 +20,10 @@ OBJECTS_READ_TABLE_TEST=$(SOURCES_READ_TABLE_TEST:.c=.o)
 
 # Compiler flags
 #
-FLAGS_COMPILER=-c -g -Wall -DDEFINE_DEFAULT_ENGINE -DDEFINE_SYNC_ENGINE #`pkg-config --FLAGS_COMPILER arrow-glib`
+FLAGS_COMPILER=-c -g -Wall -DDEFINE_DEFAULT_ENGINE -DDEFINE_SYNC_ENGINE `pkg-config --cflags arrow-glib`
 FLAGS_INCLUDE=$(foreach TMP,$(PATHS_INCLUDE),-I$(TMP))
 FLAGS_LIB=$(foreach TMP,$(PATHS_LIB),-L$(TMP))
-FLAGS_LINK_DELTA_FFI=-ldelta_kernel_ffi #`pkg-config --libs arrow-glib`
+FLAGS_LINK_DELTA_FFI=-ldelta_kernel_ffi `pkg-config --libs arrow-glib`
 
 COMPILER=gcc
 

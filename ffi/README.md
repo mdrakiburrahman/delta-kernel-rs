@@ -71,6 +71,20 @@ Localize `.vscode/launch.json`, then hit a breakpoint.
 
 #### ffi/examples/read-table/read_table.c
 
+First, we need to install arrow to read data. From [here](https://github.com/apache/arrow-site/blob/main/install.md):
+
+```bash
+sudo apt update
+sudo apt install -y -V ca-certificates lsb-release wget
+wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+sudo apt update
+
+sudo apt install -y -V libarrow-glib-dev
+
+rm -rf /workspaces/delta-kernel-rs/ffi/apache-arrow-apt-source-latest-bullseye.deb
+```
+
 To debug the "read_table", the Azure Feature must be turned on.
 Ensure to build the entire project with all features.
 
