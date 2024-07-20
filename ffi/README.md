@@ -13,35 +13,27 @@ You can build static and shared-libraries, as well as the include headers by sim
 cargo build [--release] [--features default-engine]
 ```
 
-to build and run the C program which exercises FFI:
+To build and run the C program which exercises FFI:
 
 ```sh
-# First, build the kernel and all dependencies, including the FFI
-#
-cd /workspaces/delta-kernel-rs
-cargo build --all-features
-
-# Then, run the test FFI program
-#
 cd /workspaces/delta-kernel-rs/ffi
 table=../kernel/tests/data/table-without-dv-small make run
 ```
-
-
 
 This will place libraries in the root `target` dir (`../target/[debug,release]` from the directory containing this README), and headers in `../target/ffi-headers`. In that directory there will be a `delta_kernel_ffi.h` file, which is the C header, and a `delta_kernel_ffi.hpp` which is the C++ header.
 
 ### C/C++ Extension (VSCode)
 
 By default the VSCode C/C++ Extension does not use any defines flags. You can open `settings.json` and set the following line:
-```
+
+```json
     "C_Cpp.default.defines": [
         "DEFINE_DEFAULT_ENGINE",
         "DEFINE_SYNC_ENGINE"
     ]
 ```
 
-### Building DLL
+### Building DLL for Windows
 
 To build DLL (for windows) and .so (for linux):
 
@@ -71,21 +63,9 @@ Localize `.vscode/launch.json`, then hit a breakpoint.
 
 #### ffi/examples/read-table/read_table.c
 
-First, we need to install arrow to read data. From [here](https://github.com/apache/arrow-site/blob/main/install.md):
+Ensure Arrow is installed (should be done already via `install-packages.sh`).
 
-```bash
-sudo apt update
-sudo apt install -y -V ca-certificates lsb-release wget
-wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
-sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
-sudo apt update
-
-sudo apt install -y -V libarrow-glib-dev
-
-rm -rf /workspaces/delta-kernel-rs/ffi/apache-arrow-apt-source-latest-bullseye.deb
-```
-
-To debug the "read_table", the Azure Feature must be turned on.
-Ensure to build the entire project with all features.
+To debug the `read_table`, the Azure Feature must be turned on.
+Ensure to build the entire project with `--all-features`.
 
 Localize `.vscode/launch.json`, with a bearer token and your ADLS endpoint, then hit a breakpoint.

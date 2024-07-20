@@ -1,8 +1,5 @@
 #!/bin/bash -e
 
-export GIT_ROOT=$(git rev-parse --show-toplevel)
-
-pushd ${GIT_ROOT}
 echo
 echo ">>> Building all rust projects:"
 echo
@@ -10,11 +7,10 @@ cargo build --all-features
 echo
 echo ">>> Rust projects built successfully."
 echo
-popd
 
-pushd ${GIT_ROOT}/ffi
+pushd ./ffi
 echo
-echo ">>> Building Clang FFI interface:"
+echo ">>> Building Clang FFIs:"
 echo
 make all
 echo
