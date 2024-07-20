@@ -91,7 +91,7 @@ uintptr_t make_field_list(void* data, uintptr_t reserve)
   SchemaBuilder* builder = data;
   int id = builder->list_count;
 #ifdef VERBOSE
-  printf("Making a list of lenth %li with id %i\n", reserve, id);
+  printf("Making a list of length %li with id %i\n", reserve, id);
 #endif
   builder->list_count++;
   builder->lists = realloc(builder->lists, sizeof(SchemaItemList) * builder->list_count);

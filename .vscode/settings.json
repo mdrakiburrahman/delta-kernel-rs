@@ -3,6 +3,9 @@
         "DEFINE_DEFAULT_ENGINE",
         "DEFINE_SYNC_ENGINE"
     ],
+    "C_Cpp.default.includePath": [
+    "${workspaceFolder}/target/ffi-headers/**"
+    ],
     "files.associations": {
         "delta_kernel_ffi.h": "c",
         "optional": "c",
@@ -12,7 +15,12 @@
         "functional": "c",
         "tuple": "c",
         "type_traits": "c",
-        "utility": "c"
+        "utility": "c",
+        "schema.h": "c",
+        "inttypes.h": "c",
+        "arrow.h": "c",
+        "read_table.h": "c",
+        "stdio.h": "c"
     },
     "cmake.ignoreCMakeListsMissing": true
 }

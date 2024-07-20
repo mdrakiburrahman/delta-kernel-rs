@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "arrow.h"
+#include "delta_kernel_ffi.h"
 #include "read_table.h"
 #include "schema.h"
 
