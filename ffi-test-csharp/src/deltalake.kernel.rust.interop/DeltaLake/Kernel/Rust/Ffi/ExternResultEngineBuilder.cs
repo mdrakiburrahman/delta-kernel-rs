@@ -13,18 +13,18 @@ public unsafe partial struct ExternResultEngineBuilder
 {
     public ExternResultEngineBuilder_Tag tag;
 
-    [NativeTypeName("__AnonymousRecord_delta_kernel_ffi_L146_C3")]
+    [NativeTypeName("__AnonymousRecord_delta_kernel_ffi_L159_C3")]
     public _Anonymous_e__Union Anonymous;
 
     [StructLayout(LayoutKind.Explicit)]
     public unsafe partial struct _Anonymous_e__Union
     {
         [FieldOffset(0)]
-        [NativeTypeName("__AnonymousRecord_delta_kernel_ffi_L147_C5")]
+        [NativeTypeName("__AnonymousRecord_delta_kernel_ffi_L160_C5")]
         public _Anonymous1_e__Struct Anonymous1;
 
         [FieldOffset(0)]
-        [NativeTypeName("__AnonymousRecord_delta_kernel_ffi_L150_C5")]
+        [NativeTypeName("__AnonymousRecord_delta_kernel_ffi_L163_C5")]
         public _Anonymous2_e__Struct Anonymous2;
 
         public unsafe partial struct _Anonymous1_e__Struct

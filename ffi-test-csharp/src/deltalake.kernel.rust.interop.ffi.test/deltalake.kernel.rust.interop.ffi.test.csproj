@@ -8,14 +8,19 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <!-- Custom properties -->
+  <PropertyGroup>
+    <IsLinux Condition="'$(MY_BUILD_OS)' == 'Linux'">true</IsLinux>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\deltalake.kernel.rust.interop\deltalake.kernel.rust.interop.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="delta_kernel_ffi.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+  <!-- Copy FFI .dll and .so file to build location -->
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy /Y $(ProjectDir)..\..\..\target\x86_64-pc-windows-gnu\debug\delta_kernel_ffi.dll $(OutDir)" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Exec Command="copy /Y $(ProjectDir)..\..\..\target\x86_64-unknown-linux-gnu\debug\libdelta_kernel_ffi.so $(OutDir)delta_kernel_ffi.so" Condition="'$(IsLinux)' == 'true'" />
+  </Target>
 
 </Project>
