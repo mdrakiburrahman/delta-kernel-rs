@@ -1,7 +1,7 @@
 CFFITESTBINARY=cffi-test
 READBINARY=examples/read-table/read_table
 
-SOURCES=cffi-test.c
+CFFITESTSOURCES=cffi-test.c
 READSOURCES=examples/read-table/read_table.c
 
 INCPATHS=../target/ffi-headers
@@ -12,7 +12,7 @@ CFLAGS=-c -g -Wall -DDEFINE_DEFAULT_ENGINE -DDEFINE_SYNC_ENGINE #`pkg-config --c
 
 CC=gcc
 
-OBJECTS=$(SOURCES:.c=.o)
+OBJECTS=$(CFFITESTSOURCES:.c=.o)
 READOBJECTS=$(READSOURCES:.c=.o)
 
 INCFLAGS=$(foreach TMP,$(INCPATHS),-I$(TMP))
@@ -20,7 +20,7 @@ LIBFLAGS=$(foreach TMP,$(LIBPATHS),-L$(TMP))
 
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-all: $(SOURCES) $(READSOURCES) $(CFFITESTBINARY) $(READBINARY)
+all: $(CFFITESTSOURCES) $(READSOURCES) $(CFFITESTBINARY) $(READBINARY)
 
 $(CFFITESTBINARY): $(OBJECTS)
 	$(CC) $(LIBFLAGS) $(OBJECTS) $(LDFLAGS) -o $@
