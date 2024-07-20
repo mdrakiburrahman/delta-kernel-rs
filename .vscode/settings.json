@@ -20,7 +20,8 @@
         "inttypes.h": "c",
         "arrow.h": "c",
         "read_table.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "string.h": "c"
     },
     "cmake.ignoreCMakeListsMissing": true
 }
