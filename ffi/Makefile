@@ -1,15 +1,25 @@
+# Source of truth, changing this triggers rebuild
+#
 SOURCES_CFFI_TEST=cffi-test.c
 SOURCES_READ_TABLE_TEST=examples/read-table/read_table.c
 
+# The binaries that get executed
+#
 BINARY_CFFI_TEST=cffi-test
 BINARY_READ_TABLE_TEST=examples/read-table/read_table
 
+# Various paths to include during build
+#
 PATHS_INCLUDE=../target/ffi-headers
 PATHS_LIB=../target/debug
 
+# Objects have the same name as the sources, but with .o extension
+#
 OBJECTS_CFFI_TEST=$(SOURCES_CFFI_TEST:.c=.o)
 OBJECTS_READ_TABLE_TEST=$(SOURCES_READ_TABLE_TEST:.c=.o)
 
+# Compiler flags
+#
 FLAGS_COMPILER=-c -g -Wall -DDEFINE_DEFAULT_ENGINE -DDEFINE_SYNC_ENGINE #`pkg-config --FLAGS_COMPILER arrow-glib`
 FLAGS_INCLUDE=$(foreach TMP,$(PATHS_INCLUDE),-I$(TMP))
 FLAGS_LIB=$(foreach TMP,$(PATHS_LIB),-L$(TMP))
