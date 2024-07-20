@@ -14,12 +14,13 @@ CC=gcc
 
 OBJECTS=$(SOURCES:.c=.o)
 READOBJECTS=$(READSOURCES:.c=.o)
+
 INCFLAGS=$(foreach TMP,$(INCPATHS),-I$(TMP))
 LIBFLAGS=$(foreach TMP,$(LIBPATHS),-L$(TMP))
 
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-all: $(SOURCES) $(BINARY) $(READBINARY) $(READSOURCES)
+all: $(SOURCES) $(READSOURCES) $(BINARY) $(READBINARY)
 
 $(BINARY): $(OBJECTS)
 	$(CC) $(LIBFLAGS) $(OBJECTS) $(LDFLAGS) -o $@
