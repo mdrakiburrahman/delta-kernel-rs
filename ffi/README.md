@@ -33,18 +33,6 @@ By default the VSCode C/C++ Extension does not use any defines flags. You can op
     ]
 ```
 
-### Building DLL for Windows
-
-To build DLL (for windows) and .so (for linux):
-
-```
-cd /workspaces/delta-kernel-rs/ffi
-rustup target add x86_64-pc-windows-gnu
-cargo build --all-features --lib --target x86_64-pc-windows-gnu
-```
-
-DLL is available here: `target/x86_64-pc-windows-gnu/debug/delta_kernel_ffi.dll`
-
 ### Debugging
 
 To debug, we need `gdb`.
