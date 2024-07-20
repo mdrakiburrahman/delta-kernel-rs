@@ -1,8 +1,8 @@
-BINARY_CFFI_TEST=cffi-test
-BINARY_READ_TABLE_TEST=examples/read-table/read_table
-
 SOURCES_CFFI_TEST=cffi-test.c
 SOURCES_READ_TABLE_TEST=examples/read-table/read_table.c
+
+BINARY_CFFI_TEST=cffi-test
+BINARY_READ_TABLE_TEST=examples/read-table/read_table
 
 PATHS_INCLUDE=../target/ffi-headers
 PATHS_LIB=../target/debug
