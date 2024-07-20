@@ -40,9 +40,6 @@ To build DLL (for windows) and .so (for linux):
 ```
 cd /workspaces/delta-kernel-rs/ffi
 rustup target add x86_64-pc-windows-gnu
-sudo apt-get update
-sudo apt-get install mingw-w64  -y
-
 cargo build --all-features --lib --target x86_64-pc-windows-gnu
 ```
 
