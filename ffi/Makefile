@@ -1,44 +1,44 @@
-CFFITESTBINARY=cffi-test
-READBINARY=examples/read-table/read_table
+BINARY_CFFI_TEST=cffi-test
+BINARY_READ_TABLE_TEST=examples/read-table/read_table
 
-CFFITESTSOURCES=cffi-test.c
-READSOURCES=examples/read-table/read_table.c
+SOURCES_CFFI_TEST=cffi-test.c
+SOURCES_READ_TABLE_TEST=examples/read-table/read_table.c
 
-INCPATHS=../target/ffi-headers
-LIBPATHS=../target/debug
+PATHS_INCLUDE=../target/ffi-headers
+PATHS_LIB=../target/debug
 
 LDFLAGS=-ldelta_kernel_ffi #`pkg-config --libs arrow-glib`
 CFLAGS=-c -g -Wall -DDEFINE_DEFAULT_ENGINE -DDEFINE_SYNC_ENGINE #`pkg-config --cflags arrow-glib`
 
 CC=gcc
 
-CFFITESTOBJECTS=$(CFFITESTSOURCES:.c=.o)
-READOBJECTS=$(READSOURCES:.c=.o)
+CFFITESTOBJECTS=$(SOURCES_CFFI_TEST:.c=.o)
+READOBJECTS=$(SOURCES_READ_TABLE_TEST:.c=.o)
 
-INCFLAGS=$(foreach TMP,$(INCPATHS),-I$(TMP))
-LIBFLAGS=$(foreach TMP,$(LIBPATHS),-L$(TMP))
+INCFLAGS=$(foreach TMP,$(PATHS_INCLUDE),-I$(TMP))
+LIBFLAGS=$(foreach TMP,$(PATHS_LIB),-L$(TMP))
 
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-all: $(CFFITESTSOURCES) $(READSOURCES) $(CFFITESTBINARY) $(READBINARY)
+all: $(SOURCES_CFFI_TEST) $(SOURCES_READ_TABLE_TEST) $(BINARY_CFFI_TEST) $(BINARY_READ_TABLE_TEST)
 
-$(CFFITESTBINARY): $(CFFITESTOBJECTS)
+$(BINARY_CFFI_TEST): $(CFFITESTOBJECTS)
 	$(CC) $(LIBFLAGS) $(CFFITESTOBJECTS) $(LDFLAGS) -o $@
 
-$(READBINARY): $(READOBJECTS)
+$(BINARY_READ_TABLE_TEST): $(READOBJECTS)
 	$(CC) $(LIBFLAGS) $(READOBJECTS) $(LDFLAGS) -o $@
 
 .c.o:
 	$(CC) $(INCFLAGS) $(CFLAGS) -fPIC $< -o $@
 
-run: $(CFFITESTBINARY)
-	LD_LIBRARY_PATH=$(LIBPATHS) ./$(CFFITESTBINARY) $(table)
+run: $(BINARY_CFFI_TEST)
+	LD_LIBRARY_PATH=$(PATHS_LIB) ./$(BINARY_CFFI_TEST) $(table)
 
-test: $(CFFITESTBINARY)
-	LD_LIBRARY_PATH=$(LIBPATHS) ./$(CFFITESTBINARY) file://$(ROOT_DIR)/../kernel/tests/data/basic_partitioned
+test: $(BINARY_CFFI_TEST)
+	LD_LIBRARY_PATH=$(PATHS_LIB) ./$(BINARY_CFFI_TEST) file://$(ROOT_DIR)/../kernel/tests/data/basic_partitioned
 
 distclean: clean
-	rm -f $(CFFITESTBINARY) $(READBINARY)
+	rm -f $(BINARY_CFFI_TEST) $(BINARY_READ_TABLE_TEST)
 
 clean:
-	rm -f $(CFFITESTOBJECTS) $(READOBJECTS) $(CFFITESTBINARY) $(READBINARY)
+	rm -f $(CFFITESTOBJECTS) $(READOBJECTS) $(BINARY_CFFI_TEST) $(BINARY_READ_TABLE_TEST)
