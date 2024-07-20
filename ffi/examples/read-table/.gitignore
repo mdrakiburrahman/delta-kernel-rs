@@ -1,2 +1,2 @@
 read_table
-read_table.o
+*.o
