@@ -1,16 +1,28 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/rust
 {
-	"name": "Rust",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/rust:1-1-bullseye",
-
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-
-	// Configure tool-specific properties.
+	"name": "Delta-Kernel-Rust",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"runArgs": [
+		// Access docker from host machine inside the container
+		"--add-host=host.docker.internal:host-gateway"
+	],
+	"features": {
+		"ghcr.io/devcontainers/features/azure-cli:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers/features/docker-from-docker:1": {
+			"version": "5:20.10*",
+			"moby": false
+		},
+		"ghcr.io/devcontainers/features/git:1": {
+			"version": "os-provided",
+			"ppa": false
+		}
+	},
+	"postCreateCommand": "/tmp/overlay/post-create-commands.sh",
+	"postAttachCommand": "/tmp/overlay/post-attach-commands.sh",
 	"customizations": {
-		// Configure properties specific to VS Code.
 		"vscode": {
 			"settings": {},
 			"extensions": [
@@ -20,13 +32,4 @@
 			]
 		}
 	}
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "rustc --version",
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
 }
