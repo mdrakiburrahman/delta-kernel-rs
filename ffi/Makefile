@@ -1,11 +1,15 @@
 BINARY=cffi-test
-SOURCES=cffi-test.c
 READBINARY=examples/read-table/read_table
+
+SOURCES=cffi-test.c
 READSOURCES=examples/read-table/read_table.c
+
 INCPATHS=../target/ffi-headers
 LIBPATHS=../target/debug
+
 LDFLAGS=-ldelta_kernel_ffi #`pkg-config --libs arrow-glib`
 CFLAGS=-c -g -Wall -DDEFINE_DEFAULT_ENGINE -DDEFINE_SYNC_ENGINE #`pkg-config --cflags arrow-glib`
+
 CC=gcc
 
 OBJECTS=$(SOURCES:.c=.o)
@@ -36,4 +40,4 @@ distclean: clean
 	rm -f $(BINARY) $(READBINARY)
 
 clean:
-	rm -f $(OBJECTS) $(BINARY) $(READBINARY)
+	rm -f $(OBJECTS) $(READOBJECTS) $(BINARY) $(READBINARY)
