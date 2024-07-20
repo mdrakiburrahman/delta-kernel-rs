@@ -37,12 +37,7 @@ By default the VSCode C/C++ Extension does not use any defines flags. You can op
     ]
 ```
 
-To debug:
-
-```
-sudo apt-get update
-sudo apt-get install gdb
-```
+### Building DLL
 
 To build DLL (for windows) and .so (for linux):
 
@@ -57,5 +52,22 @@ cargo build --all-features --lib --target x86_64-pc-windows-gnu
 
 DLL is available here: `target/x86_64-pc-windows-gnu/debug/delta_kernel_ffi.dll`
 
+### Debugging
+
+To debug, we need `gdb`.
+
+```
+sudo apt-get update
+sudo apt-get install gdb
+```
+
+#### ffi/cffi-test.c
+
+Localize `.vscode/launch.json`, then hit a breakpoint.
+
+#### ffi/examples/read-table/read_table.c
+
 To debug the "read_table", the Azure Feature must be turned on.
 Ensure to build the entire project with all features.
+
+Localize `.vscode/launch.json`, with a bearer token and your ADLS endpoint, then hit a breakpoint.

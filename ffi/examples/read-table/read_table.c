@@ -218,6 +218,10 @@ int main(int argc, char* argv[])
   }
 
   // an example of using a builder to set options when building an engine
+  // This effectively passes options down into the polars object_store crate
+  //
+  //   >>> https://docs.pola.rs/api/rust/dev/polars_io/cloud/options/enum.AzureConfigKey.html
+  //
   EngineBuilder* engine_builder = engine_builder_res.ok;
   set_builder_opt(engine_builder, "bearer_token", bearer_token);
   ExternResultHandleSharedExternEngine engine_res = builder_build(engine_builder);
