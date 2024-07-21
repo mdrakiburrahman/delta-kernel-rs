@@ -13,18 +13,23 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
     {
         public static void Main(string[] args)
         {
-            if (args.Length < 2)
+            if (args.Length < 3)
                 throw new ArgumentException(
-                    "Usage: 'Drive:\\folder\\table' 'abfss://container@storage.dfs.core.windows.net/table'"
+                    "Usage: 'Drive:\\folder\\table' 'abfss://container@storage.dfs.core.windows.net/table' '2'"
                 );
 
             var localTablePath = args[0];
             var remoteTablePath = args[1];
+            int numLoops = int.Parse(args[2]);
+
             var adlsOauthToken = new VisualStudioCredential().GetToken(new TokenRequestContext(new[] { "https://storage.azure.com/.default" }), default).Token;
 
-            int numLoops = 10;
             for (int i = 0; i < numLoops; i++)
             {
+                Console.WriteLine("\n=================\n");
+                Console.WriteLine($"Loop {i + 1} of {numLoops}");
+                Console.WriteLine("\n=================\n");
+
                 bool isLocalTestPass = RunLocalTest(localTablePath);
                 bool isAdlsTestPass = RunAdlsTest(remoteTablePath, adlsOauthToken);
 
