@@ -1,11 +1,11 @@
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Delegates;
 using DeltaLake.Kernel.Rust.Ffi;
 using System.Runtime.InteropServices;
-using static Deltalake.Kernel.Rust.Interop.Ffi.Test.Delegates.VisitDelegates;
+using static Deltalake.Kernel.Rust.Interop.Ffi.Test.Delegates.Visit.VisitDelegates;
 
 namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines
 {
-    public unsafe static class TestEngines
+  public unsafe static class TestEngines
     {
         public static int TestWithEngine(
             ExternResultHandleSharedExternEngine engineRes,
@@ -33,9 +33,10 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines
             }
 
             SharedSnapshot* snapshot = snapshotRes.Anonymous.Anonymous1.ok;
-
             ulong v = FFI_NativeMethodsHandler.version(snapshot);
+
             Console.WriteLine($"version: {v}");
+
             ExternResultHandleSharedScan scanRes = FFI_NativeMethodsHandler.scan(
                 snapshot,
                 engine,
@@ -64,8 +65,6 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines
 
             VisitDataDelegate callbackDelegate = VisitCallbacks.VisitData;
             IntPtr callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
-
-            // TODO: Add code here that actually reads the data and prints it via Arrow or otherwise
 
             // Iterate scanned files
             //

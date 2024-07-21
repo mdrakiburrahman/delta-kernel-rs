@@ -1,7 +1,7 @@
 using DeltaLake.Kernel.Rust.Ffi;
 using System.Runtime.InteropServices;
 
-namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Delegates
+namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Delegates.Visit
 {
     public static class VisitDelegates
     {
