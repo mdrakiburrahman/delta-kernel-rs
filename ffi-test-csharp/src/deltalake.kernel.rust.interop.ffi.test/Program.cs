@@ -10,10 +10,8 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
     {
         public static void Main(string[] args)
         {
-            if (args.Length < 1)
-            {
-                throw new ArgumentException("Usage: 'localtable/path'");
-            }
+            if (args.Length < 1) throw new ArgumentException("Usage: 'localtable/path'");
+
             var localTablePath = args[0];
             bool isLocalTestPass = RunLocalTest(localTablePath);
 
@@ -34,7 +32,7 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
 
         private static bool RunLocalTest(string localTablePath)
         {
-            Console.WriteLine($"Reading table at {localTablePath}");
+            Console.WriteLine($"Reading local table at {localTablePath}");
 
             fixed (sbyte* tablePathPtr = localTablePath.ToSByte())
             {
@@ -47,16 +45,11 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
                 AllocateErrorFn callbackDelegate = AllocateErrorCallbacks.WarnAndThrowAllocateError;
                 IntPtr callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
 
-                ExternResultHandleSharedExternEngine defaultEngineRes =
-                    FFI_NativeMethodsHandler.get_default_engine(tablePathSlice, callbackPointer);
-                ExternResultHandleSharedExternEngine syncEngineRes =
-                    FFI_NativeMethodsHandler.get_sync_engine(callbackPointer);
+                ExternResultHandleSharedExternEngine defaultEngineRes = FFI_NativeMethodsHandler.get_default_engine(tablePathSlice, callbackPointer);
+                ExternResultHandleSharedExternEngine syncEngineRes = FFI_NativeMethodsHandler.get_sync_engine(callbackPointer);
 
                 Console.WriteLine($"Executing with default engine");
-                int defaultTestResult = TestEngines.LocalTestEngine(
-                    tablePathSlice,
-                    defaultEngineRes
-                );
+                int defaultTestResult = TestEngines.LocalTestEngine(tablePathSlice, defaultEngineRes);
 
                 Console.WriteLine($"Executing with sync engine");
                 int syncTestResult = TestEngines.LocalTestEngine(tablePathSlice, syncEngineRes);
