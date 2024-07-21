@@ -1,3 +1,4 @@
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Context;
 using DeltaLake.Kernel.Rust.Ffi;
 using System.Runtime.InteropServices;
 
@@ -41,6 +42,14 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit
                 engineContext,
                 callbackPtr
             );
+        }
+
+        public static unsafe void VisitPartition(void* context, KernelStringSlice partition)
+        {
+            PartitionList* list = (PartitionList*)context;
+            char* col = (char*)StringAllocator.AllocateString(partition);
+            list->Cols[list->Len] = col;
+            list->Len++;
         }
     }
 }

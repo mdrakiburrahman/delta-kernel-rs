@@ -1,5 +1,7 @@
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Schema;
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Delegates.Schema;
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Context;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Properties;
 using DeltaLake.Kernel.Rust.Ffi;
 using System.Runtime.InteropServices;
@@ -111,5 +113,50 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Handlers
           }
           Marshal.FreeHGlobal((IntPtr)builder.lists);
         }
+
+        public unsafe PartitionList* GetPartitionList(SharedGlobalScanState* state)
+        {
+            Console.WriteLine("\nBuilding list of partition columns");
+            int count = (int)FFI_NativeMethodsHandler.get_partition_column_count(state);
+
+            PartitionList* list = (PartitionList*)Marshal.AllocHGlobal(sizeof(PartitionList));
+            list->Len = 0; // We set the `len` to 0 here and use it to track how many items we've added to the list
+            list->Cols = (char**)Marshal.AllocHGlobal(sizeof(char*) * count);
+
+            StringSliceIterator* partIter = FFI_NativeMethodsHandler.get_partition_columns(state);
+
+            for (;;)
+            {
+              bool hasNext = FFI_NativeMethodsHandler.string_slice_next(partIter, (void*)list, Marshal.GetFunctionPointerForDelegate(VisitCallbacks.VisitPartition));
+              if (!hasNext)
+              {
+                Console.WriteLine("Done iterating partition columns");
+                break;
+              }
+            }
+
+            if (list->Len != count)
+            {
+              throw new InvalidOperationException("Error, partition iterator did not return get_partition_column_count columns");
+            }
+
+            if (list->Len > 0)
+            {
+              Console.WriteLine("\nPartition columns are:\n");
+              for (int i = 0; i < list->Len; i++)
+              {
+                string col = Marshal.PtrToStringAnsi((IntPtr)list->Cols[i]);
+                Console.WriteLine($"  - {col}");
+              }
+            }
+            else
+            {
+              Console.WriteLine("Table has no partition columns");
+            }
+            Console.WriteLine();
+
+            FFI_NativeMethodsHandler.free_string_slice_data(partIter);
+            return list;
+          }
   }
 }

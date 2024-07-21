@@ -1,4 +1,5 @@
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit;
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Context;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Handlers;
 using DeltaLake.Kernel.Rust.Ffi;
 using System.Runtime.InteropServices;
@@ -38,8 +39,8 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
       ISchemaHandler schemaHandler = new SchemaHandlerDemo();
       schemaHandler.PrintSchema(snapshot);
 
-      var table_root = Marshal.PtrToStringAnsi((nint)FFI_NativeMethodsHandler.snapshot_table_root(snapshot, Marshal.GetFunctionPointerForDelegate(StringAllocator.AllocateString)));
-      Console.WriteLine($"Table root: {table_root}");
+      string tableRoot = Marshal.PtrToStringAnsi((nint)FFI_NativeMethodsHandler.snapshot_table_root(snapshot, Marshal.GetFunctionPointerForDelegate(StringAllocator.AllocateString)));
+      Console.WriteLine($"Table root: {tableRoot}");
 
       Console.WriteLine("Starting table scan");
 
@@ -51,6 +52,19 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
       }
 
       SharedScan* scan = scanRes.Anonymous.Anonymous1.ok;
+      SharedGlobalScanState* globalState = FFI_NativeMethodsHandler.get_global_scan_state(scan);
+      SharedSchema* readSchema = FFI_NativeMethodsHandler.get_global_read_schema(globalState);
+      PartitionList* partitionCols = schemaHandler.GetPartitionList(globalState);
+
+      EngineContext context = new EngineContext
+      {
+        GlobalState = globalState,
+        ReadSchema = readSchema,
+        TableRoot = (char*)Marshal.StringToHGlobalAnsi(tableRoot),
+        Engine = engine,
+        PartitionCols = partitionCols,
+        PartitionValues = null
+      };
 
       ExternResultHandleSharedScanDataIterator dataIterRes = FFI_NativeMethodsHandler.kernel_scan_data_init(engine, scan);
       if (
@@ -67,13 +81,12 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
       VisitDataDelegate callbackDelegate = VisitCallbacks.VisitDataDemo;
       nint callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
 
-      // Iterate scanned files
-      //
+      Console.WriteLine("\nIterating scan data\n");
       for (; ; )
       {
         ExternResultbool okRes = FFI_NativeMethodsHandler.kernel_scan_data_next(
             dataIter,
-            null,
+            &context,
             callbackPointer
         );
         if (okRes.tag != ExternResultbool_Tag.Okbool)
@@ -83,9 +96,12 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
         }
         else if (!okRes.Anonymous.Anonymous1.ok)
         {
+          Console.WriteLine("Scan data iterator done\n");
           break;
         }
       }
+
+      Console.WriteLine("All done reading table data\n");
 
       FFI_NativeMethodsHandler.free_scan(scan);
       FFI_NativeMethodsHandler.free_snapshot(snapshot);
