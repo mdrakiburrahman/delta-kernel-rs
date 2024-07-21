@@ -1,4 +1,5 @@
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Context;
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Diagnostics;
 using DeltaLake.Kernel.Rust.Ffi;
 using System.Runtime.InteropServices;
 
@@ -34,15 +35,18 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit
             KernelBoolSlice selectionVec
         )
         {
-            CScanCallback callbackDelegate = VisitCallbackDemo;
-            IntPtr callbackPtr = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+            Console.WriteLine("\nScan iterator found some data to read.\nOf this data, here is a selection vector:\n");
+            VisitPrinter.PrintSelectionVector("\t", selectionVec);
+
+            Console.WriteLine("\nAsking kernel to call us back for each scan row (file to read)\n");
             FFI_NativeMethodsHandler.visit_scan_data(
                 engineData,
                 selectionVec,
                 engineContext,
-                callbackPtr
+                Marshal.GetFunctionPointerForDelegate(VisitCallbackDemo)
             );
-        }
+            FFI_NativeMethodsHandler.free_bool_slice(selectionVec);
+    }
 
         public static unsafe void VisitPartition(void* context, KernelStringSlice partition)
         {
