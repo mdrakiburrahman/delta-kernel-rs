@@ -22,23 +22,27 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
             var remoteTablePath = args[1];
             var adlsOauthToken = new VisualStudioCredential().GetToken(new TokenRequestContext(new[] { "https://storage.azure.com/.default" }), default).Token;
 
-            bool isLocalTestPass = RunLocalTest(localTablePath);
-            bool isAdlsTestPass = RunAdlsTest(remoteTablePath, adlsOauthToken);
+            int numLoops = 10;
+            for (int i = 0; i < numLoops; i++)
+            {
+                bool isLocalTestPass = RunLocalTest(localTablePath);
+                bool isAdlsTestPass = RunAdlsTest(remoteTablePath, adlsOauthToken);
 
-            if (isLocalTestPass && isAdlsTestPass)
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("\nTests succeeded :)\n");
-                Console.ResetColor();
+                if (isLocalTestPass && isAdlsTestPass)
+                {
+                  Console.ForegroundColor = ConsoleColor.Green;
+                  Console.WriteLine("\nTests succeeded :)\n");
+                  Console.ResetColor();
+                }
+                else
+                {
+                  Console.ForegroundColor = ConsoleColor.Red;
+                  Console.WriteLine("\nTest failed :(\n");
+                  Console.ResetColor();
+                  throw new InvalidOperationException("Test failed");
+                }
+              }
             }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\nTest failed :(\n");
-                Console.ResetColor();
-                throw new InvalidOperationException("Test failed");
-            }
-        }
 
         private static bool RunAdlsTest(string adlsTablePath, string adlsOauthToken)
         {
