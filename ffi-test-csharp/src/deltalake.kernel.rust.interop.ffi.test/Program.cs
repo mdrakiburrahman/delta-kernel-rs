@@ -54,9 +54,10 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
                 ExternResultEngineBuilder engineBuilderRes = FFI_NativeMethodsHandler.get_engine_builder(tablePathSlice, callbackPointer);
                 if (engineBuilderRes.tag != ExternResultEngineBuilder_Tag.OkEngineBuilder)
                 {
-                  Console.WriteLine("Failed to get engine");
+                  Console.WriteLine("Failed to get engine builder");
                   return false;
                 }
+                EngineBuilder* engineBuilder = engineBuilderRes.Anonymous.Anonymous1.ok;
 
                 return true;
             }
@@ -84,15 +85,15 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
                     || syncEngineRes.tag != ExternResultHandleSharedExternEngine_Tag.OkHandleSharedExternEngine
                 )
                 {
-                  Console.WriteLine("Failed to get engine");
+                  Console.WriteLine("Failed to get one or more engines");
                   return false;
                 }
 
                 Console.WriteLine($"Executing with default engine");
-                int defaultTestResult = TestEngines.LocalTestEngine(tablePathSlice, defaultEngineRes);
+                int defaultTestResult = TestEngines.TestWithEngineLocally(defaultEngineRes, tablePathSlice);
 
                 Console.WriteLine($"Executing with sync engine");
-                int syncTestResult = TestEngines.LocalTestEngine(tablePathSlice, syncEngineRes);
+                int syncTestResult = TestEngines.TestWithEngineLocally(syncEngineRes, tablePathSlice);
 
                 return defaultTestResult == 0 && syncTestResult == 0;
             }

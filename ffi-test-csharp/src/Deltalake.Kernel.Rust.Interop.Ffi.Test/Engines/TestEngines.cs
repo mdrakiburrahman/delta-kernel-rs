@@ -7,9 +7,9 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines
 {
     public unsafe static class TestEngines
     {
-        public static int LocalTestEngine(
-            KernelStringSlice tablePathSlice,
-            ExternResultHandleSharedExternEngine engineRes
+        public static int TestWithEngineLocally(
+            ExternResultHandleSharedExternEngine engineRes,
+            KernelStringSlice tablePathSlice
         )
         {
             if (
