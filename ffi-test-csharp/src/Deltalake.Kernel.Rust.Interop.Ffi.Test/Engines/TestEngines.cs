@@ -1,12 +1,12 @@
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit;
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Handlers;
 using DeltaLake.Kernel.Rust.Ffi;
 using System.Runtime.InteropServices;
 using static Deltalake.Kernel.Rust.Interop.Ffi.Test.Delegates.Visit.VisitDelegates;
-using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Handlers;
 
 namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines
 {
-    public unsafe static class TestEngines
+  public unsafe static class TestEngines
     {
         public static int TestWithEngine(
             ExternResultHandleSharedExternEngine engineRes,
@@ -23,10 +23,7 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines
 
             SharedExternEngine* engine = engineRes.Anonymous.Anonymous1.ok;
 
-            ExternResultHandleSharedSnapshot snapshotRes = FFI_NativeMethodsHandler.snapshot(
-                tablePathSlice,
-                engine
-            );
+            ExternResultHandleSharedSnapshot snapshotRes = FFI_NativeMethodsHandler.snapshot(tablePathSlice, engine);
             if (snapshotRes.tag != ExternResultHandleSharedSnapshot_Tag.OkHandleSharedSnapshot)
             {
                 Console.WriteLine("Failed to create snapshot");
@@ -41,11 +38,12 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines
             ISchemaHandler schemaHandler = new SchemaHandlerDemo();
             schemaHandler.PrintSchema(snapshot);
 
-            ExternResultHandleSharedScan scanRes = FFI_NativeMethodsHandler.scan(
-                snapshot,
-                engine,
-                null
-            );
+            var table_root = Marshal.PtrToStringAnsi((IntPtr)FFI_NativeMethodsHandler.snapshot_table_root(snapshot, Marshal.GetFunctionPointerForDelegate(StringAllocator.AllocateString)));
+            Console.WriteLine($"Table root: {table_root}");
+
+            Console.WriteLine("Starting table scan");
+
+            ExternResultHandleSharedScan scanRes = FFI_NativeMethodsHandler.scan(snapshot, engine, null);
             if (scanRes.tag != ExternResultHandleSharedScan_Tag.OkHandleSharedScan)
             {
                 Console.WriteLine("Failed to create scan");
@@ -54,8 +52,7 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines
 
             SharedScan* scan = scanRes.Anonymous.Anonymous1.ok;
 
-            ExternResultHandleSharedScanDataIterator dataIterRes =
-                FFI_NativeMethodsHandler.kernel_scan_data_init(engine, scan);
+            ExternResultHandleSharedScanDataIterator dataIterRes = FFI_NativeMethodsHandler.kernel_scan_data_init(engine, scan);
             if (
                 dataIterRes.tag
                 != ExternResultHandleSharedScanDataIterator_Tag.OkHandleSharedScanDataIterator
