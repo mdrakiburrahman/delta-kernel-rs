@@ -100,6 +100,13 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Delegates.Schema
         );
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void VisitBinaryDelegate(
+            void* data,
+            UIntPtr siblingListId,
+            KernelStringSlice name
+        );
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public unsafe delegate void VisitDateDelegate(
             void* data,
             UIntPtr siblingListId,

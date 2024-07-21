@@ -1,11 +1,11 @@
 using DeltaLake.Kernel.Rust.Ffi;
 using System.Runtime.InteropServices;
 
-namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Delegates
+namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit
 {
     public static class VisitCallbacks
     {
-        public static unsafe void VisitCallback(
+        public static unsafe void VisitCallbackDemo(
             void* engine_context,
             KernelStringSlice path,
             long size,
@@ -27,13 +27,13 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Delegates
             Console.WriteLine(message);
         }
 
-        public static unsafe void VisitData(
+        public static unsafe void VisitDataDemo(
             void* engineContext,
             ExclusiveEngineData* engineData,
             KernelBoolSlice selectionVec
         )
         {
-            CScanCallback callbackDelegate = VisitCallback;
+            CScanCallback callbackDelegate = VisitCallbackDemo;
             IntPtr callbackPtr = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
             FFI_NativeMethodsHandler.visit_scan_data(
                 engineData,

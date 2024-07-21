@@ -1,11 +1,12 @@
-using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Delegates;
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit;
 using DeltaLake.Kernel.Rust.Ffi;
 using System.Runtime.InteropServices;
 using static Deltalake.Kernel.Rust.Interop.Ffi.Test.Delegates.Visit.VisitDelegates;
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Handlers;
 
 namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines
 {
-  public unsafe static class TestEngines
+    public unsafe static class TestEngines
     {
         public static int TestWithEngine(
             ExternResultHandleSharedExternEngine engineRes,
@@ -37,6 +38,9 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines
 
             Console.WriteLine($"version: {v}");
 
+            ISchemaHandler schemaHandler = new SchemaHandlerDemo();
+            schemaHandler.PrintSchema(snapshot);
+
             ExternResultHandleSharedScan scanRes = FFI_NativeMethodsHandler.scan(
                 snapshot,
                 engine,
@@ -63,7 +67,7 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines
 
             SharedScanDataIterator* dataIter = dataIterRes.Anonymous.Anonymous1.ok;
 
-            VisitDataDelegate callbackDelegate = VisitCallbacks.VisitData;
+            VisitDataDelegate callbackDelegate = VisitCallbacks.VisitDataDemo;
             IntPtr callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
 
             // Iterate scanned files
