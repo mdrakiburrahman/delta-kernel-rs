@@ -16,18 +16,42 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit
             CStringMap* partition_map
         )
         {
+            EngineContext* context = (EngineContext*)engine_context;
+            ExternResultKernelBoolSlice selectionVectorRes = FFI_NativeMethodsHandler.selection_vector_from_dv(dv_info, context->Engine, context->GlobalState);
+            if (selectionVectorRes.tag != ExternResultKernelBoolSlice_Tag.OkKernelBoolSlice)
+            {
+                throw new InvalidOperationException("Could not get selection vector from kernel");
+            }
+            KernelBoolSlice selectionVec = selectionVectorRes.Anonymous.Anonymous1.ok;
+
+            if (selectionVec.len > 0)
+            {
+                Console.WriteLine("\tSelection vector for this file:\n");
+                VisitPrinter.PrintSelectionVector("\t\t", selectionVec);
+            }
+            else
+            {
+              Console.WriteLine("\tNo selection vector for this file.");
+            }
+
             string pathStr = new string(path.ptr, 0, (int)path.len, System.Text.Encoding.UTF8);
             string message = $"file: {pathStr} (size: {size}, num_records:";
             if (stats != null)
             {
-                message += $"{stats->num_records})";
+              message += $"{stats->num_records})";
             }
             else
             {
-                message += " [no stats])";
+              message += " [no stats])";
             }
-            Console.WriteLine(message);
-        }
+            Console.WriteLine($"\n{message}\n");
+
+            context->PartitionValues = partition_map;
+            VisitPrinter.PrintPartitionInfo(context, partition_map);
+
+            FFI_NativeMethodsHandler.free_bool_slice(selectionVec);
+            context->PartitionValues = null;
+    }
 
         public static unsafe void VisitDataDemo(
             void* engineContext,

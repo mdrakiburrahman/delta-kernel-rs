@@ -94,12 +94,12 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
         }
         else if (!okRes.Anonymous.Anonymous1.ok)
         {
-          Console.WriteLine("Scan data iterator done\n");
+          Console.WriteLine("\nScan data iterator done\n");
           break;
         }
       }
 
-      Console.WriteLine("All done reading table data\n");
+      Console.WriteLine("\nAll done reading table data\n");
 
       FFI_NativeMethodsHandler.free_scan(scan);
       FFI_NativeMethodsHandler.free_snapshot(snapshot);

@@ -1,4 +1,6 @@
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Context;
 using DeltaLake.Kernel.Rust.Ffi;
+using System.Runtime.InteropServices;
 
 namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Diagnostics
 {
@@ -31,5 +33,38 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Diagnostics
                 Console.WriteLine($"{indent}sel[{i}] = {(selectionVec.ptr[i] ? "true" : "false")}");
             }
         }
-    }
+
+        public static unsafe void PrintPartitionInfo(
+            EngineContext* context,
+            CStringMap* partitionValues
+        )
+        {
+            for (int i = 0; i < context->PartitionCols->Len; i++)
+            {
+                char* col = context->PartitionCols->Cols[i];
+                KernelStringSlice key = new KernelStringSlice
+                {
+                    ptr = (sbyte*)col,
+                    len = StrLen(col)
+        };
+
+                char* partitionVal = (char*)FFI_NativeMethodsHandler.get_from_map(partitionValues, key, Marshal.GetFunctionPointerForDelegate(StringAllocator.AllocateString));
+                if (partitionVal != null)
+                {
+                    Console.WriteLine($"\tPartition '{Marshal.PtrToStringAnsi((IntPtr)col)}' here: {Marshal.PtrToStringAnsi((IntPtr)partitionVal)}");
+                }
+                else
+                {
+                    Console.WriteLine("\tNo partition here");
+                }
+            }
+        }
+
+        private static unsafe ulong StrLen(char* str)
+        {
+          char* s;
+          for (s = str; *s != '\0'; ++s) { }
+          return (ulong)(s - str);
+        }
+  }
 }
