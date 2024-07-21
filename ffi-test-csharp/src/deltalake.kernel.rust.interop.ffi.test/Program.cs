@@ -1,7 +1,7 @@
 using Azure.Core;
 using Azure.Identity;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Errors;
-using Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines;
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Extensions;
 using DeltaLake.Kernel.Rust.Ffi;
 using DeltaLake.Kernel.Rust.Interop.Ffi.Test.Extensions;
@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 
 namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
 {
-    public unsafe static class FfiTestConsoleApp
+  public unsafe static class FfiTestConsoleApp
     {
         public static void Main(string[] args)
         {
