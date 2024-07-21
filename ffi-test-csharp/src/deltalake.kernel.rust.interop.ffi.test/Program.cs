@@ -1,5 +1,8 @@
+using Azure.Core;
+using Azure.Identity;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Errors;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines;
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Extensions;
 using DeltaLake.Kernel.Rust.Ffi;
 using DeltaLake.Kernel.Rust.Interop.Ffi.Test.Extensions;
 using System.Runtime.InteropServices;
@@ -17,9 +20,10 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
 
             var localTablePath = args[0];
             var remoteTablePath = args[1];
+            var adlsOauthToken = new VisualStudioCredential().GetToken(new TokenRequestContext(new[] { "https://storage.azure.com/.default" }), default).Token;
 
             bool isLocalTestPass = RunLocalTest(localTablePath);
-            bool isAdlsTestPass = RunAdlsTest(remoteTablePath);
+            bool isAdlsTestPass = RunAdlsTest(remoteTablePath, adlsOauthToken);
 
             if (isLocalTestPass && isAdlsTestPass)
             {
@@ -36,7 +40,7 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
             }
         }
 
-        private static bool RunAdlsTest(string adlsTablePath)
+        private static bool RunAdlsTest(string adlsTablePath, string adlsOauthToken)
         {
             Console.WriteLine($"Reading Azure Data Lake Storage table at {adlsTablePath}");
 
@@ -54,10 +58,18 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
                 ExternResultEngineBuilder engineBuilderRes = FFI_NativeMethodsHandler.get_engine_builder(tablePathSlice, callbackPointer);
                 if (engineBuilderRes.tag != ExternResultEngineBuilder_Tag.OkEngineBuilder)
                 {
-                  Console.WriteLine("Failed to get engine builder");
+                  Console.WriteLine("Could not get engine builder");
                   return false;
                 }
                 EngineBuilder* engineBuilder = engineBuilderRes.Anonymous.Anonymous1.ok;
+                EngineBuilderPointerMethods.WithBuilderOption(engineBuilder, "bearer_token", adlsOauthToken);
+
+                ExternResultHandleSharedExternEngine engineRes = FFI_NativeMethodsHandler.builder_build(engineBuilder);
+                if (engineRes.tag != ExternResultHandleSharedExternEngine_Tag.OkHandleSharedExternEngine)
+                {
+                  Console.WriteLine("Failed to get engine");
+                  return false;
+                }
 
                 return true;
             }
