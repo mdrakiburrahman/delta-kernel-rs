@@ -1,3 +1,4 @@
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Properties;
 using DeltaLake.Kernel.Rust.Ffi;
 
 namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Context
@@ -10,5 +11,6 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Context
     public SharedExternEngine* Engine;
     public PartitionList* PartitionCols;
     public CStringMap* PartitionValues;
+    public ArrowContext* ArrowContext;
   }
 }

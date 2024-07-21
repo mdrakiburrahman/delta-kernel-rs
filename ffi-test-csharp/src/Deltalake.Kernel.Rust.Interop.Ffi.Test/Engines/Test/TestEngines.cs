@@ -1,3 +1,4 @@
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Properties;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Context;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Handlers;
@@ -54,6 +55,7 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
       SharedGlobalScanState* globalState = FFI_NativeMethodsHandler.get_global_scan_state(scan);
       SharedSchema* readSchema = FFI_NativeMethodsHandler.get_global_read_schema(globalState);
       PartitionList* partitionCols = schemaHandler.GetPartitionList(globalState);
+      ArrowContext arrowContext = new ArrowContext();
 
       EngineContext context = new EngineContext
       {
@@ -62,7 +64,8 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
         TableRoot = (char*)Marshal.StringToHGlobalAnsi(tableRoot),
         Engine = engine,
         PartitionCols = partitionCols,
-        PartitionValues = null
+        PartitionValues = null,
+        ArrowContext = &arrowContext
       };
 
       ExternResultHandleSharedScanDataIterator dataIterRes = FFI_NativeMethodsHandler.kernel_scan_data_init(engine, scan);
