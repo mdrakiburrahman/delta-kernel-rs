@@ -7,7 +7,7 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines
 {
     public unsafe static class TestEngines
     {
-        public static int TestWithEngineLocally(
+        public static int TestWithEngine(
             ExternResultHandleSharedExternEngine engineRes,
             KernelStringSlice tablePathSlice
         )
@@ -64,6 +64,8 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines
 
             VisitDataDelegate callbackDelegate = VisitCallbacks.VisitData;
             IntPtr callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+
+            // TODO: Add code here that actually reads the data and prints it via Arrow or otherwise
 
             // Iterate scanned files
             //

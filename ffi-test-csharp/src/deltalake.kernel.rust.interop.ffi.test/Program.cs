@@ -65,13 +65,9 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
                 EngineBuilderPointerMethods.WithBuilderOption(engineBuilder, "bearer_token", adlsOauthToken);
 
                 ExternResultHandleSharedExternEngine engineRes = FFI_NativeMethodsHandler.builder_build(engineBuilder);
-                if (engineRes.tag != ExternResultHandleSharedExternEngine_Tag.OkHandleSharedExternEngine)
-                {
-                  Console.WriteLine("Failed to get engine");
-                  return false;
-                }
+                int adlsTestResult = TestEngines.TestWithEngine(engineRes, tablePathSlice);
 
-                return true;
+                return adlsTestResult == 0;
             }
         }
 
@@ -102,10 +98,10 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
                 }
 
                 Console.WriteLine($"Executing with default engine");
-                int defaultTestResult = TestEngines.TestWithEngineLocally(defaultEngineRes, tablePathSlice);
+                int defaultTestResult = TestEngines.TestWithEngine(defaultEngineRes, tablePathSlice);
 
                 Console.WriteLine($"Executing with sync engine");
-                int syncTestResult = TestEngines.TestWithEngineLocally(syncEngineRes, tablePathSlice);
+                int syncTestResult = TestEngines.TestWithEngine(syncEngineRes, tablePathSlice);
 
                 return defaultTestResult == 0 && syncTestResult == 0;
             }
