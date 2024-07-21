@@ -42,11 +42,12 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Diagnostics
             for (int i = 0; i < context->PartitionCols->Len; i++)
             {
                 char* col = context->PartitionCols->Cols[i];
+                string colName = Marshal.PtrToStringAnsi((IntPtr)col);
                 KernelStringSlice key = new KernelStringSlice
                 {
                     ptr = (sbyte*)col,
-                    len = StrLen(col)
-        };
+                    len = (ulong)colName.Length
+                };
 
                 char* partitionVal = (char*)FFI_NativeMethodsHandler.get_from_map(partitionValues, key, Marshal.GetFunctionPointerForDelegate(StringAllocator.AllocateString));
                 if (partitionVal != null)
