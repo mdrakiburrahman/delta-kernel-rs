@@ -3,7 +3,6 @@ using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Context;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Handlers;
 using DeltaLake.Kernel.Rust.Ffi;
 using System.Runtime.InteropServices;
-using static Deltalake.Kernel.Rust.Interop.Ffi.Test.Delegates.Visit.VisitDelegates;
 
 namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
 {
@@ -78,8 +77,7 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
 
       SharedScanDataIterator* dataIter = dataIterRes.Anonymous.Anonymous1.ok;
 
-      VisitDataDelegate callbackDelegate = VisitCallbacks.VisitDataDemo;
-      nint callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+      nint callbackPointer = Marshal.GetFunctionPointerForDelegate(VisitCallbacks.VisitDataDemo);
 
       Console.WriteLine("\nIterating scan data\n");
       for (; ; )

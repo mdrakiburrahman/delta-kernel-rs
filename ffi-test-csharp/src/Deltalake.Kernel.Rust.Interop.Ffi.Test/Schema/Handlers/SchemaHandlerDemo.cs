@@ -1,6 +1,5 @@
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Schema;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit;
-using Deltalake.Kernel.Rust.Interop.Ffi.Test.Delegates.Schema;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Context;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Properties;
 using DeltaLake.Kernel.Rust.Ffi;
@@ -18,23 +17,23 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Handlers
             EngineSchemaVisitor visitor = new EngineSchemaVisitor()
             {
                 data = &builder,
-                make_field_list = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.MakeFieldListDelegate)EngineSchemaVisitorCallbacks.MakeFieldListDemo),
-                visit_struct = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.VisitStructDelegate)EngineSchemaVisitorCallbacks.VisitStructDemo),
-                visit_array = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.VisitArrayDelegate)EngineSchemaVisitorCallbacks.VisitArrayDemo),
-                visit_map = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.VisitMapDelegate)EngineSchemaVisitorCallbacks.VisitMapDemo),
-                visit_decimal = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.VisitDecimalDelegate)EngineSchemaVisitorCallbacks.VisitDecimalDemo),
-                visit_string = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.VisitStringDelegate)EngineSchemaVisitorCallbacks.VisitStringDemo),
-                visit_long = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.VisitLongDelegate)EngineSchemaVisitorCallbacks.VisitLongDemo),
-                visit_integer = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.VisitIntegerDelegate)EngineSchemaVisitorCallbacks.VisitIntegerDemo),
-                visit_short = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.VisitShortDelegate)EngineSchemaVisitorCallbacks.VisitShortDemo),
-                visit_byte = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.VisitByteDelegate)EngineSchemaVisitorCallbacks.VisitByteDemo),
-                visit_float = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.VisitFloatDelegate)EngineSchemaVisitorCallbacks.VisitFloatDemo),
-                visit_double = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.VisitDoubleDelegate)EngineSchemaVisitorCallbacks.VisitDoubleDemo),
-                visit_boolean = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.VisitBooleanDelegate)EngineSchemaVisitorCallbacks.VisitBooleanDemo),
-                visit_binary = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.VisitBinaryDelegate)EngineSchemaVisitorCallbacks.VisitBinaryDemo),
-                visit_date = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.VisitDateDelegate)EngineSchemaVisitorCallbacks.VisitDateDemo),
-                visit_timestamp = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.VisitTimestampDelegate)EngineSchemaVisitorCallbacks.VisitTimestampDemo),
-                visit_timestamp_ntz = Marshal.GetFunctionPointerForDelegate((EngineSchemaVisitorDelegates.VisitTimestampNtzDelegate)EngineSchemaVisitorCallbacks.VisitTimestampNtzDemo),
+                make_field_list = Marshal.GetFunctionPointerForDelegate(EngineSchemaVisitorCallbacks.MakeFieldListDemo),
+                visit_struct = Marshal.GetFunctionPointerForDelegate(EngineSchemaVisitorCallbacks.VisitStructDemo),
+                visit_array = Marshal.GetFunctionPointerForDelegate(EngineSchemaVisitorCallbacks.VisitArrayDemo),
+                visit_map = Marshal.GetFunctionPointerForDelegate(EngineSchemaVisitorCallbacks.VisitMapDemo),
+                visit_decimal = Marshal.GetFunctionPointerForDelegate(EngineSchemaVisitorCallbacks.VisitDecimalDemo),
+                visit_string = Marshal.GetFunctionPointerForDelegate( EngineSchemaVisitorCallbacks.VisitStringDemo),
+                visit_long = Marshal.GetFunctionPointerForDelegate(EngineSchemaVisitorCallbacks.VisitLongDemo),
+                visit_integer = Marshal.GetFunctionPointerForDelegate(EngineSchemaVisitorCallbacks.VisitIntegerDemo),
+                visit_short = Marshal.GetFunctionPointerForDelegate(EngineSchemaVisitorCallbacks.VisitShortDemo),
+                visit_byte = Marshal.GetFunctionPointerForDelegate(EngineSchemaVisitorCallbacks.VisitByteDemo),
+                visit_float = Marshal.GetFunctionPointerForDelegate(EngineSchemaVisitorCallbacks.VisitFloatDemo),
+                visit_double = Marshal.GetFunctionPointerForDelegate(EngineSchemaVisitorCallbacks.VisitDoubleDemo),
+                visit_boolean = Marshal.GetFunctionPointerForDelegate(EngineSchemaVisitorCallbacks.VisitBooleanDemo),
+                visit_binary = Marshal.GetFunctionPointerForDelegate(EngineSchemaVisitorCallbacks.VisitBinaryDemo),
+                visit_date = Marshal.GetFunctionPointerForDelegate(EngineSchemaVisitorCallbacks.VisitDateDemo),
+                visit_timestamp = Marshal.GetFunctionPointerForDelegate(EngineSchemaVisitorCallbacks.VisitTimestampDemo),
+                visit_timestamp_ntz = Marshal.GetFunctionPointerForDelegate(EngineSchemaVisitorCallbacks.VisitTimestampNtzDemo),
             };
 
             ulong schemaListId = FFI_NativeMethodsHandler.visit_schema(snapshot, &visitor);
