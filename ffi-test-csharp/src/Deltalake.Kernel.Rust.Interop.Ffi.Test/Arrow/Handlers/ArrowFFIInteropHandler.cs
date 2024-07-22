@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 
 namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
 {
-  public class ArrowFFIInteropHandler : IArrowInteropHandler
+    public class ArrowFFIInteropHandler : IArrowInteropHandler
     {
         public ArrowFFIInteropHandler() { }
 
@@ -26,12 +26,12 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
 
             if (context->CurFilter != null)
             {
-                // Apply filter logic here. This example does not implement filtering.
-                // You would need to implement filtering based on your application's logic.
+                Console.WriteLine(
+                    $"WARNING: Not applying any filter since Apache.Arrow does not support garrow_record_batch_filter yet"
+                );
             }
 
             recordBatch = AddPartitionColumns(recordBatch, partitionCols, partitionValues);
-
             if (recordBatch == null)
             {
                 Console.WriteLine("Failed to add partition columns, not adding batch");
@@ -49,12 +49,10 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
                 }
                 Marshal.FreeHGlobal((IntPtr)context->Batches);
             }
-
             fixed (RecordBatch** batchesPtr = newBatches)
             {
                 context->Batches = batchesPtr;
             }
-
             newBatches[context->NumBatches] = (RecordBatch*)Unsafe.AsPointer(ref recordBatch);
             context->NumBatches++;
 
