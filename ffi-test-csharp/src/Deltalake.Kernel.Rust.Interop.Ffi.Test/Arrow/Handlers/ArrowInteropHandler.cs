@@ -1,4 +1,6 @@
 using Apache.Arrow;
+using Apache.Arrow.C;
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Converter;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Properties;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Context;
 using DeltaLake.Kernel.Rust.Ffi;
@@ -62,8 +64,9 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
 
         private unsafe Apache.Arrow.Schema GetSchema(FFI_ArrowSchema* schema)
         {
-            // Implement schema conversion logic here
-            throw new NotImplementedException();
+            return CArrowSchemaImporter.ImportSchema(
+                ArrowFfiSchemaConverter.ConvertFFIArrowSchemaToCArrowSchema(schema)
+            );
         }
 
         private unsafe static RecordBatch GetRecordBatch(
