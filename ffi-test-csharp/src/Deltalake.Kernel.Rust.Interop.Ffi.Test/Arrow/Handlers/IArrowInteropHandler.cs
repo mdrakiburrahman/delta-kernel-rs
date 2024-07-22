@@ -12,5 +12,11 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
             PartitionList* partitionCols,
             CStringMap* partitionValues
         );
-    }
+
+        public unsafe void CReadParquetFile(
+            EngineContext* context,
+            KernelStringSlice path,
+            KernelBoolSlice selectionVector
+        );
+  }
 }

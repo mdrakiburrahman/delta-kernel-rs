@@ -61,6 +61,21 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
             );
         }
 
+        public unsafe void CReadParquetFile(
+            EngineContext* context,
+            KernelStringSlice path,
+            KernelBoolSlice selectionVector
+        )
+        {
+            string tableRoot = Marshal.PtrToStringAnsi((IntPtr)context->TableRoot);
+            int fullLen = tableRoot.Length + (int)path.len + 1;
+            char* fullPath = (char*)Marshal.AllocHGlobal(sizeof(char) * fullLen);
+            string fullPathStr = $"{tableRoot}{Marshal.PtrToStringAnsi((IntPtr)path.ptr, (int)path.len)}";
+            Console.WriteLine($"\tReading parquet file at {fullPathStr}");
+
+            // TODO: Add more
+        }
+
         private unsafe Apache.Arrow.Schema GetSchema(FFI_ArrowSchema* schema)
         {
             return CArrowSchemaImporter.ImportSchema(

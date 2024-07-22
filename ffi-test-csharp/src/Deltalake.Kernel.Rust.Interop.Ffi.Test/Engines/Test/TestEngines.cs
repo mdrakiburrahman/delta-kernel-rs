@@ -104,6 +104,9 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
 
       Console.WriteLine("\nAll done reading table data\n");
 
+      // TODO: Print arrow context
+      // TODO: Free arrow context
+
       FFI_NativeMethodsHandler.free_scan(scan);
       FFI_NativeMethodsHandler.free_snapshot(snapshot);
       FFI_NativeMethodsHandler.free_engine(engine);

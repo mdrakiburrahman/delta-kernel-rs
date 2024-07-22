@@ -1,3 +1,4 @@
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Context;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Diagnostics;
 using DeltaLake.Kernel.Rust.Ffi;
@@ -48,6 +49,9 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit
 
             context->PartitionValues = partition_map;
             VisitPrinter.PrintPartitionInfo(context, partition_map);
+
+            IArrowInteropHandler arrowHandler = new ArrowFFIInteropHandler();
+            arrowHandler.CReadParquetFile(context, path, selectionVec);
 
             FFI_NativeMethodsHandler.free_bool_slice(selectionVec);
             context->PartitionValues = null;
