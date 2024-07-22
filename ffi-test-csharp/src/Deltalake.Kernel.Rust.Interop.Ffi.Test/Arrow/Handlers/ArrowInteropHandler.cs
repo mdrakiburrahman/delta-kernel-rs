@@ -65,7 +65,7 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
         private unsafe Apache.Arrow.Schema GetSchema(FFI_ArrowSchema* schema)
         {
             return CArrowSchemaImporter.ImportSchema(
-                ArrowFfiSchemaConverter.ConvertFFIArrowSchemaToCArrowSchema(schema)
+                ArrowFfiSchemaConverter.ConvertFFISchema(schema)
             );
         }
 
@@ -74,8 +74,10 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
             Apache.Arrow.Schema schema
         )
         {
-            // Implement record batch conversion logic here
-            throw new NotImplementedException();
+            return CArrowArrayImporter.ImportRecordBatch(
+                ArrowFfiSchemaConverter.ConvertFFIArray(array),
+                schema
+            );
         }
 
         private static RecordBatch AddPartitionColumns(
