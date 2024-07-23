@@ -8,6 +8,29 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit
 {
     public static class VisitCallbacks
     {
+        public static unsafe void VisitReadDataDemo(void* vContext, ExclusiveEngineData* data)
+        {
+            Console.WriteLine("\tConverting read data to arrow\n");
+            EngineContext* context = (EngineContext*)vContext;
+            ExternResultArrowFFIData arrowRes = FFI_NativeMethodsHandler.get_raw_arrow_data(
+                data,
+                context->Engine
+            );
+
+            if (arrowRes.tag != ExternResultArrowFFIData_Tag.OkArrowFFIData)
+            {
+                throw new InvalidOperationException("Could not get raw arrow data");
+            }
+            ArrowFFIData* arrowData = arrowRes.Anonymous.Anonymous1.ok;
+            IArrowInteropHandler interopHandler = new ArrowFFIInteropHandler();
+            interopHandler.AddBatchToContext(
+                context->ArrowContext,
+                arrowData,
+                context->PartitionCols,
+                context->PartitionValues
+            );
+        }
+
         public static unsafe void VisitCallbackDemo(
             void* engine_context,
             KernelStringSlice path,
@@ -18,7 +41,12 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit
         )
         {
             EngineContext* context = (EngineContext*)engine_context;
-            ExternResultKernelBoolSlice selectionVectorRes = FFI_NativeMethodsHandler.selection_vector_from_dv(dv_info, context->Engine, context->GlobalState);
+            ExternResultKernelBoolSlice selectionVectorRes =
+                FFI_NativeMethodsHandler.selection_vector_from_dv(
+                    dv_info,
+                    context->Engine,
+                    context->GlobalState
+                );
             if (selectionVectorRes.tag != ExternResultKernelBoolSlice_Tag.OkKernelBoolSlice)
             {
                 throw new InvalidOperationException("Could not get selection vector from kernel");
@@ -32,18 +60,18 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit
             }
             else
             {
-              Console.WriteLine("\tNo selection vector for this file.");
+                Console.WriteLine("\tNo selection vector for this file.");
             }
 
             string pathStr = new string(path.ptr, 0, (int)path.len, System.Text.Encoding.UTF8);
             string message = $"file: {pathStr} (size: {size}, num_records:";
             if (stats != null)
             {
-              message += $"{stats->num_records})";
+                message += $"{stats->num_records})";
             }
             else
             {
-              message += " [no stats])";
+                message += " [no stats])";
             }
             Console.WriteLine($"\n{message}\n");
 
@@ -55,7 +83,7 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit
 
             FFI_NativeMethodsHandler.free_bool_slice(selectionVec);
             context->PartitionValues = null;
-    }
+        }
 
         public static unsafe void VisitDataDemo(
             void* engineContext,
@@ -63,7 +91,9 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit
             KernelBoolSlice selectionVec
         )
         {
-            Console.WriteLine("\nScan iterator found some data to read.\nOf this data, here is a selection vector:\n");
+            Console.WriteLine(
+                "\nScan iterator found some data to read.\nOf this data, here is a selection vector:\n"
+            );
             VisitPrinter.PrintSelectionVector("\t", selectionVec);
 
             Console.WriteLine("\nAsking kernel to call us back for each scan row (file to read)\n");
@@ -74,7 +104,7 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit
                 Marshal.GetFunctionPointerForDelegate(VisitCallbackDemo)
             );
             FFI_NativeMethodsHandler.free_bool_slice(selectionVec);
-    }
+        }
 
         public static unsafe void VisitPartition(void* context, KernelStringSlice partition)
         {

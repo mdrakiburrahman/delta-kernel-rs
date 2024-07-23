@@ -3,8 +3,11 @@ using Apache.Arrow.C;
 using Apache.Arrow.Types;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Converter;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Properties;
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Errors;
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Context;
 using DeltaLake.Kernel.Rust.Ffi;
+using DeltaLake.Kernel.Rust.Interop.Ffi.Test.Extensions;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -47,7 +50,6 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
                 {
                     newBatches[i] = context->Batches[i];
                 }
-                Marshal.FreeHGlobal((IntPtr)context->Batches);
             }
             fixed (RecordBatch** batchesPtr = newBatches)
             {
@@ -70,10 +72,65 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
             string tableRoot = Marshal.PtrToStringAnsi((IntPtr)context->TableRoot);
             int fullLen = tableRoot.Length + (int)path.len + 1;
             char* fullPath = (char*)Marshal.AllocHGlobal(sizeof(char) * fullLen);
-            string fullPathStr = $"{tableRoot}{Marshal.PtrToStringAnsi((IntPtr)path.ptr, (int)path.len)}";
-            Console.WriteLine($"\tReading parquet file at {fullPathStr}");
+            string fullPathStr =
+                $"{tableRoot}{Marshal.PtrToStringAnsi((IntPtr)path.ptr, (int)path.len)}";
 
-            // TODO: Add more
+            fixed (sbyte* keyPtr = fullPathStr.ToSByte())
+            {
+                KernelStringSlice tablePathSlice = new KernelStringSlice
+                {
+                    ptr = keyPtr,
+                    len = (nuint)fullPathStr.Length
+                };
+                FileMeta meta = new FileMeta { path = tablePathSlice, };
+
+                Console.WriteLine($"\tReading parquet file at {fullPathStr}");
+                ExternResultHandleExclusiveFileReadResultIterator readRes =
+                    FFI_NativeMethodsHandler.read_parquet_file(
+                        context->Engine,
+                        &meta,
+                        context->ReadSchema
+                    );
+                if (
+                    readRes.tag
+                    != ExternResultHandleExclusiveFileReadResultIterator_Tag.OkHandleExclusiveFileReadResultIterator
+                )
+                {
+                    Console.WriteLine("Failed to read parquet file");
+                    return;
+                }
+                ExclusiveFileReadResultIterator* readIterator = readRes.Anonymous.Anonymous1.ok;
+
+                if (selectionVector.len > 0)
+                {
+                    Console.WriteLine(
+                        $"WARNING: Not applying selection vector since Apache.Arrow does not support garrow_record_batch_filter yet"
+                    );
+                }
+
+                for (; ; )
+                {
+                    ExternResultbool okRes = FFI_NativeMethodsHandler.read_result_next(
+                        readIterator,
+                        context,
+                        Marshal.GetFunctionPointerForDelegate(VisitCallbacks.VisitReadDataDemo)
+                    );
+                    if (okRes.tag != ExternResultbool_Tag.Okbool)
+                    {
+                        ReadError* castedError = (ReadError*)okRes.Anonymous.Anonymous2.err;
+                        throw new InvalidOperationException(
+                            $"Failed to iterate read data: {castedError->Message}"
+                        );
+                    }
+                    else if (!okRes.Anonymous.Anonymous1.ok)
+                    {
+                        Console.WriteLine("\tDone reading parquet file\n");
+                        break;
+                    }
+                }
+
+                FFI_NativeMethodsHandler.free_read_result_iter(readIterator);
+            }
         }
 
         private unsafe Apache.Arrow.Schema GetSchema(FFI_ArrowSchema* schema)
