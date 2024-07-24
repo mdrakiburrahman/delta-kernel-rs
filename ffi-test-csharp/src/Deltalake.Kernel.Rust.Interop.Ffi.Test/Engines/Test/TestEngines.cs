@@ -1,5 +1,5 @@
 using Apache.Arrow;
-using Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow;
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Extensions;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Properties;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Context;
@@ -109,7 +109,10 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
 
       Console.WriteLine("\nAll done reading table data\n");
       Table table = arrowContext.ConvertToTable();
-      // TODO: Print arrow table?
+      string content = arrowContext.ToString();
+
+      Console.WriteLine($"Table Root: {tableRoot}\n");
+      Console.WriteLine(content);
 
       // TODO: Free arrow context and all pointers inside of it
       // TODO: Free engine context

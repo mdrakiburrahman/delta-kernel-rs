@@ -37,7 +37,7 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Converter
 
         public unsafe static CArrowArray* ConvertFFIArray(FFI_ArrowArray* ffiArray)
         {
-            CArrowArray* cArray = (CArrowArray*)Marshal.AllocHGlobal(sizeof(CArrowArray));
+            CArrowArray* cArray = CArrowArray.Create();
 
             ///////////////////////////////////////////////////////////////////////
             //                                                                   //
