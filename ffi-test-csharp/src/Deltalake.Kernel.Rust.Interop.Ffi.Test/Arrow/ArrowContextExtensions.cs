@@ -22,7 +22,6 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow
             {
                 recordBatches.Add(*context.Batches[i]);
             }
-            // Getting a memory exception here
             return Table.TableFromRecordBatches(context.Schema, recordBatches);
         }
     }
