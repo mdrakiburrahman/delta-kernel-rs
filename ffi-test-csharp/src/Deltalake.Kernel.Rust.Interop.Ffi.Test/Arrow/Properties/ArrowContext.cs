@@ -1,15 +1,17 @@
 using Apache.Arrow;
 using Microsoft.Data.Analysis;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Properties
 {
-    public unsafe class ArrowContext
+    public unsafe class ArrowContext : IDisposable
     {
         public int NumBatches;
         public Apache.Arrow.Schema Schema;
         public RecordBatch** Batches;
         public BooleanArray* CurFilter;
+        public Boolean disposed;
 
         public ArrowContext()
         {
@@ -17,10 +19,30 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Properties
             Batches = null;
             CurFilter = null;
             Schema = null;
+            disposed = false;
+        }
+
+        public void Dispose()
+        {
+            for (int i = 0; i < NumBatches; i++)
+            {
+                RecordBatch* batch = Batches[i];
+                if (batch != null)
+                {
+                    Marshal.FreeHGlobal((IntPtr)batch);
+                    Batches[i] = null;
+                }
+            }
+            Marshal.FreeHGlobal((IntPtr)Batches);
         }
 
         public override string ToString()
         {
+            if (disposed)
+            {
+                throw new ObjectDisposedException("ArrowContext");
+            }
+
             List<RecordBatch> recordBatches = new List<RecordBatch>(NumBatches);
             for (int i = 0; i < NumBatches; i++)
             {
@@ -64,7 +86,7 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Properties
                             sb.Append(lines[j]);
                         }
                         sb.Append(Environment.NewLine);
-          }
+                    }
                 }
             }
             return sb.ToString();

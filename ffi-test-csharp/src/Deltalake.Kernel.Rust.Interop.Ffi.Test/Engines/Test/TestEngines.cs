@@ -114,9 +114,10 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
       Console.WriteLine($"Table Root: {tableRoot}\n");
       Console.WriteLine(content);
 
-      // TODO: Free arrow context and all pointers inside of it
-      // TODO: Free engine context
-
+      arrowContext.Dispose();
+      FFI_NativeMethodsHandler.free_kernel_scan_data(dataIter);
+      FFI_NativeMethodsHandler.free_global_read_schema(readSchema);
+      FFI_NativeMethodsHandler.free_global_scan_state(globalState);
       FFI_NativeMethodsHandler.free_scan(scan);
       FFI_NativeMethodsHandler.free_snapshot(snapshot);
       FFI_NativeMethodsHandler.free_engine(engine);

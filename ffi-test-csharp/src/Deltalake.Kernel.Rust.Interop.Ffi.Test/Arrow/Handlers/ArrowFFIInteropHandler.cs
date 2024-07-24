@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 
 namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
 {
-  public class ArrowFFIInteropHandler : IArrowInteropHandler
+    public class ArrowFFIInteropHandler : IArrowInteropHandler
     {
         public ArrowFFIInteropHandler() { }
 
@@ -25,7 +25,8 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
         {
             // TODO: Ensure to release the memory allocated here
             RecordBatch* recordBatchPtr = (RecordBatch*)Marshal.AllocHGlobal(sizeof(RecordBatch));
-            RecordBatch** newBatchPointersArrayPtr = (RecordBatch**)Marshal.AllocHGlobal(sizeof(RecordBatch*) * (context->NumBatches + 1));
+            RecordBatch** newBatchPointersArrayPtr = (RecordBatch**)
+                Marshal.AllocHGlobal(sizeof(RecordBatch*) * (context->NumBatches + 1));
 
             var schema = GetSchema(&arrowData->schema);
             *recordBatchPtr = GetRecordBatch(&arrowData->array, schema);
@@ -58,7 +59,9 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
             context->Batches = newBatchPointersArrayPtr;
             context->NumBatches++;
 
-            Console.WriteLine($"Added batch to arrow context, have {context->NumBatches} batches in context now");
+            Console.WriteLine(
+                $"Added batch to arrow context, have {context->NumBatches} batches in context now"
+            );
         }
 
         public unsafe void CReadParquetFile(
@@ -70,7 +73,8 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
             string tableRoot = Marshal.PtrToStringAnsi((IntPtr)context->TableRoot);
             int fullLen = tableRoot.Length + (int)path.len + 1;
             char* fullPath = (char*)Marshal.AllocHGlobal(sizeof(char) * fullLen);
-            string fullPathStr = $"{tableRoot}{Marshal.PtrToStringAnsi((IntPtr)path.ptr, (int)path.len)}";
+            string fullPathStr =
+                $"{tableRoot}{Marshal.PtrToStringAnsi((IntPtr)path.ptr, (int)path.len)}";
 
             fixed (sbyte* keyPtr = fullPathStr.ToSByte())
             {
@@ -130,22 +134,28 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
             }
         }
 
-        private unsafe Apache.Arrow.Schema GetSchema(FFI_ArrowSchema* schema)
+        private unsafe Apache.Arrow.Schema GetSchema(FFI_ArrowSchema* ffiSchema)
         {
-            return CArrowSchemaImporter.ImportSchema(
-                ArrowFfiSchemaConverter.ConvertFFISchema(schema)
+            CArrowSchema* cSchema = CArrowSchema.Create();
+            Apache.Arrow.Schema aSchema = CArrowSchemaImporter.ImportSchema(
+                ArrowFfiSchemaConverter.ConvertFFISchema(ffiSchema, cSchema)
             );
+            CArrowSchema.Free(cSchema);
+            return aSchema;
         }
 
         private unsafe static RecordBatch GetRecordBatch(
-            FFI_ArrowArray* array,
+            FFI_ArrowArray* ffiArray,
             Apache.Arrow.Schema schema
         )
         {
-            return CArrowArrayImporter.ImportRecordBatch(
-                ArrowFfiSchemaConverter.ConvertFFIArray(array),
+            CArrowArray* cArray = CArrowArray.Create();
+            RecordBatch batch = CArrowArrayImporter.ImportRecordBatch(
+                ArrowFfiSchemaConverter.ConvertFFIArray(ffiArray, cArray),
                 schema
             );
+            CArrowArray.Free(cArray);
+            return batch;
         }
 
         private unsafe static RecordBatch AddPartitionColumns(

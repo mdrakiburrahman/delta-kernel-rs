@@ -7,10 +7,8 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Converter
 {
     public static class ArrowFfiSchemaConverter
     {
-        public unsafe static CArrowSchema* ConvertFFISchema(FFI_ArrowSchema* ffiSchema)
+        public unsafe static CArrowSchema* ConvertFFISchema(FFI_ArrowSchema* ffiSchema, CArrowSchema* cSchema)
         {
-            CArrowSchema* cSchema = CArrowSchema.Create();
-
             ///////////////////////////////////////////////////////
             //                                                   //
             //                  MASSIVE HACK                     //
@@ -35,10 +33,8 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Converter
             return cSchema;
         }
 
-        public unsafe static CArrowArray* ConvertFFIArray(FFI_ArrowArray* ffiArray)
+        public unsafe static CArrowArray* ConvertFFIArray(FFI_ArrowArray* ffiArray, CArrowArray* cArray)
         {
-            CArrowArray* cArray = CArrowArray.Create();
-
             ///////////////////////////////////////////////////////////////////////
             //                                                                   //
             //                        MASSIVE HACK                               //
