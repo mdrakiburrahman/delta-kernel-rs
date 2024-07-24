@@ -4,7 +4,8 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Properties
 {
     public unsafe class ArrowContext
     {
-        public ulong NumBatches;
+        public int NumBatches;
+        public Apache.Arrow.Schema Schema;
         public RecordBatch** Batches;
         public BooleanArray* CurFilter;
 
@@ -13,6 +14,7 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Properties
             NumBatches = 0;
             Batches = null;
             CurFilter = null;
+            Schema = null;
         }
     }
 }

@@ -8,12 +8,11 @@ using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Context;
 using DeltaLake.Kernel.Rust.Ffi;
 using DeltaLake.Kernel.Rust.Interop.Ffi.Test.Extensions;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
 {
-    public class ArrowFFIInteropHandler : IArrowInteropHandler
+  public class ArrowFFIInteropHandler : IArrowInteropHandler
     {
         public ArrowFFIInteropHandler() { }
 
@@ -24,8 +23,13 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
             CStringMap* partitionValues
         )
         {
+            // TODO: Ensure to release the memory allocated here
+            RecordBatch* recordBatchPtr = (RecordBatch*)Marshal.AllocHGlobal(sizeof(RecordBatch));
+            RecordBatch** newBatchPointersArrayPtr = (RecordBatch**)Marshal.AllocHGlobal(sizeof(RecordBatch*) * (context->NumBatches + 1));
+
             var schema = GetSchema(&arrowData->schema);
-            var recordBatch = GetRecordBatch(&arrowData->array, schema);
+            *recordBatchPtr = GetRecordBatch(&arrowData->array, schema);
+            context->Schema = schema;
 
             if (context->CurFilter != null)
             {
@@ -34,33 +38,27 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
                 );
             }
 
-            recordBatch = AddPartitionColumns(recordBatch, partitionCols, partitionValues);
-            if (recordBatch == null)
+            *recordBatchPtr = AddPartitionColumns(*recordBatchPtr, partitionCols, partitionValues);
+            if (recordBatchPtr == null)
             {
                 Console.WriteLine("Failed to add partition columns, not adding batch");
                 return;
             }
 
-            // Add the record batch to the context
+            // Copy old batch pointers, if exists, append the new batch
             //
-            var newBatches = new RecordBatch*[context->NumBatches + 1];
             if (context->NumBatches > 0)
             {
-                for (ulong i = 0; i < context->NumBatches; i++)
+                for (int i = 0; i < context->NumBatches; i++)
                 {
-                    newBatches[i] = context->Batches[i];
+                    newBatchPointersArrayPtr[i] = context->Batches[i];
                 }
             }
-            fixed (RecordBatch** batchesPtr = newBatches)
-            {
-                context->Batches = batchesPtr;
-            }
-            newBatches[context->NumBatches] = (RecordBatch*)Unsafe.AsPointer(ref recordBatch);
+            newBatchPointersArrayPtr[context->NumBatches] = recordBatchPtr;
+            context->Batches = newBatchPointersArrayPtr;
             context->NumBatches++;
 
-            Console.WriteLine(
-                $"Added batch to arrow context, have {context->NumBatches} batches in context now"
-            );
+            Console.WriteLine($"Added batch to arrow context, have {context->NumBatches} batches in context now");
         }
 
         public unsafe void CReadParquetFile(
@@ -72,8 +70,7 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
             string tableRoot = Marshal.PtrToStringAnsi((IntPtr)context->TableRoot);
             int fullLen = tableRoot.Length + (int)path.len + 1;
             char* fullPath = (char*)Marshal.AllocHGlobal(sizeof(char) * fullLen);
-            string fullPathStr =
-                $"{tableRoot}{Marshal.PtrToStringAnsi((IntPtr)path.ptr, (int)path.len)}";
+            string fullPathStr = $"{tableRoot}{Marshal.PtrToStringAnsi((IntPtr)path.ptr, (int)path.len)}";
 
             fixed (sbyte* keyPtr = fullPathStr.ToSByte())
             {

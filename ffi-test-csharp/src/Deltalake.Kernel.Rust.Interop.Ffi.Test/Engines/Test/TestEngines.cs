@@ -1,3 +1,5 @@
+using Apache.Arrow;
+using Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Properties;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Callbacks.Visit;
 using Deltalake.Kernel.Rust.Interop.Ffi.Test.Schema.Context;
@@ -57,6 +59,9 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
       PartitionList* partitionCols = schemaHandler.GetPartitionList(globalState);
       ArrowContext arrowContext = new ArrowContext();
 
+      // This is fine, because ArrowContext or EngineContext is not used outside
+      // of this method's scope.
+      //
       EngineContext context = new EngineContext
       {
         GlobalState = globalState,
@@ -103,9 +108,11 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
       }
 
       Console.WriteLine("\nAll done reading table data\n");
+      Table table = arrowContext.ConvertToTable();
+      // TODO: Print arrow table?
 
-      // TODO: Print arrow context
-      // TODO: Free arrow context
+      // TODO: Free arrow context and all pointers inside of it
+      // TODO: Free engine context
 
       FFI_NativeMethodsHandler.free_scan(scan);
       FFI_NativeMethodsHandler.free_snapshot(snapshot);
