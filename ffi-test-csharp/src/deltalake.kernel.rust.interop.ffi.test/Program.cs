@@ -15,7 +15,7 @@ namespace DeltaLake.Kernel.Rust.Interop.Ffi.Test
         {
             if (args.Length < 3)
                 throw new ArgumentException(
-                    "Usage: 'Drive:\\folder\\table' 'abfss://container@storage.dfs.core.windows.net/table' '2'"
+                    "Usage: 'Drive:\\folder\\table' 'abfss://container@storage.dfs.core.windows.net/table/' '2'"
                 );
 
             var localTablePath = args[0];
