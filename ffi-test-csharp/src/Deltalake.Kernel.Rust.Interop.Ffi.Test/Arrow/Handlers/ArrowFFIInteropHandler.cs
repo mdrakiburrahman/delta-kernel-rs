@@ -71,10 +71,7 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Arrow.Handlers
         )
         {
             string tableRoot = Marshal.PtrToStringAnsi((IntPtr)context->TableRoot);
-            int fullLen = tableRoot.Length + (int)path.len + 1;
-            char* fullPath = (char*)Marshal.AllocHGlobal(sizeof(char) * fullLen);
-            string fullPathStr =
-                $"{tableRoot}{Marshal.PtrToStringAnsi((IntPtr)path.ptr, (int)path.len)}";
+            string fullPathStr = $"{tableRoot}{Marshal.PtrToStringAnsi((IntPtr)path.ptr, (int)path.len)}";
 
             fixed (sbyte* keyPtr = fullPathStr.ToSByte())
             {

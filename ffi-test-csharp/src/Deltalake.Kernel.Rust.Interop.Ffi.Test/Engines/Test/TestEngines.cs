@@ -36,19 +36,22 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
       SharedSnapshot* snapshot = snapshotRes.Anonymous.Anonymous1.ok;
       ulong v = FFI_NativeMethodsHandler.version(snapshot);
 
-      // USEFUL: Same as DeltaTable.Version()
+      // USEFUL: Same as DeltaTable.Version() ✅
       //
       Console.WriteLine($"version: {v}");
 
-      // USEFUL: If we can convert this, we get DeltaTable.Schema()
-      //
-      ISchemaHandler schemaHandler = new SchemaHandlerDemo();
-      schemaHandler.PrintSchema(snapshot);
-
-      // USEFUL: Same as DeltaTable.Location()
+      // USEFUL: Same as DeltaTable.Location() ✅
       //
       string tableRoot = Marshal.PtrToStringAnsi((nint)FFI_NativeMethodsHandler.snapshot_table_root(snapshot, Marshal.GetFunctionPointerForDelegate(StringAllocator.AllocateString)));
       Console.WriteLine($"Table root: {tableRoot}");
+
+      // USEFUL: If we can convert this to arrow somehow, we get DeltaTable.Schema() ❌
+      //
+      // Confirmed with Nick there's no native way to convert this to an Arrow Schema.
+      // Not worth the pain converting this by hand.
+      //
+      ISchemaHandler schemaHandler = new SchemaHandlerDemo();
+      schemaHandler.PrintSchema(snapshot);
 
       Console.WriteLine("Starting table scan");
 
@@ -63,7 +66,7 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
       SharedGlobalScanState* globalState = FFI_NativeMethodsHandler.get_global_scan_state(scan);
       SharedSchema* readSchema = FFI_NativeMethodsHandler.get_global_read_schema(globalState);
 
-      // USEFUL: If we can convert this, we get TableMetadata.PartitionColumns()
+      // USEFUL: If we can convert this, we get TableMetadata.PartitionColumns() ✅
       //
       PartitionList* partitionCols = schemaHandler.GetPartitionList(globalState);
       ArrowContext arrowContext = new ArrowContext();
@@ -118,7 +121,6 @@ namespace Deltalake.Kernel.Rust.Interop.Ffi.Test.Engines.Test
 
       Console.WriteLine("\nAll done reading table data\n");
 
-      // USEFUL: We can also easily get the schema here, i.e. implement DeltaTable.Schema()
       // USEFUL: Pull out the DataFrame API, and implement DeltaTable.ToDataFrame()
       //
       Table table = arrowContext.ConvertToTable();
